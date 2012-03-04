@@ -10,7 +10,7 @@
      QHBoxLayout *mainLayout = new QHBoxLayout;
      mainLayout->addWidget(this->visorOpenGL);
      setLayout(mainLayout);
-     setWindowTitle(tr("IG:Proyecto [2010-2011]. Antonio Gutierrez Martinez"));
+     setWindowTitle(tr("IG[2010-2011]. czyrux"));
      resize(1280,800);
  }
 
