@@ -6,8 +6,8 @@
 /*                                                                       */
 /*************************************************************************/
 /**
- * @file wasp.h
- * @brief Implementation of obeject wasp in 3D. Inherits from HierarchycalObject
+ * @file plants.h
+ * @brief Implementation of circle in 3D
  * @author Antonio Gutierrez Martinez
  *
  *
@@ -26,56 +26,19 @@
  *
  */
 
-#ifndef WASP_H
-#define WASP_H
+#ifndef PLANTS_H
+#define PLANTS_H
 
 #include "objects.h"
-#include "vertex.h"
-#include "circle.h"
-#include "hierarchyObject.h"
 
-
-//CLASS WASP
-class WaspHead {
+class Plants {
 private:
-    Sphere *_eye;
-    SemiSphere *_face;
-    Cylinder *_antenna;
-    material _eyeColor , _faceColor;
-    float _width;
-    float _high;
+    int _width;
+    float _scale;
+    _object3D *_plant;
 public:
-    WaspHead( float width=1.0 , float high=1.0 );
-    ~WaspHead();
-    void draw( drawMode d  );
-    void setColor ( material faceColor , material eyeColor );
+    Plants( int width , float scale=0.05);
+    ~Plants();
+    void draw(drawMode d);
 };
-
-class Wasp : public _hierarchyObject{
-private:
-    WaspHead *_head;
-    Cylinder *_body;
-    Cylinder *_body2;
-    Cone *_stinger;
-    SemiSphere *_upStinger;
-    Sphere *_wingCircle;
-    Cube *_wing;
-    Cylinder *_shadow;
-    Cylinder *_shot;
-    material _first , _second ;
-
-    bool _range;
-    Circle *_radius;
-    float _rangeRadius;
-
-public:
-    Wasp( float width=.5 , float high=2.0 , bool range=true);
-    ~Wasp();
-    float getRadioCollision();
-    void draw( drawMode d );
-    void drawRange();
-    float getRange();
-    void setColor (material firstColor , material secondColor );
-};
-
-#endif // WASP_H
+#endif // PLANTS_H

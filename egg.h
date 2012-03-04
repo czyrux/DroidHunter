@@ -1,14 +1,16 @@
 /*************************************************************************/
 /*                                                                       */
-/*         Copyright (C) Antonio Gutierrez Martinez [2010]               */
+/*                                                                       */
+/*                                                                       */
+/*         Copyright (C) Czyrux [2010]                                   */
 /*                                                                       */
 /*         License: GPL3                                                 */
 /*                                                                       */
 /*************************************************************************/
 /**
- * @file axis.h
- * @brief Implementation of axis x, y and z in 3D
- * @author Antonio Gutierrez Martinez
+ * @file egg.h
+ * @brief Implementation of egg in 3D
+ * @author czyrux
  *
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -26,19 +28,23 @@
  *
  */
 
-#ifndef AXIS_H
-#define AXIS_H
+#ifndef EGG_H
+#define EGG_H
 
-#include <gl.h>
+#include "objects.h"
 
-#define AXIS_SIZE 100
-
-class Axis {
-	public:
-		Axis();
-		void draw();
+class Egg {
+private:
+    static Sphere _object;
+    float _radious;
+    _vertex3f _position;
+public:
+    Egg();
+    Egg (_vertex3f position , float radious=2 );
+    void parameters(_vertex3f position , float radious=2);
+    void draw();
+    _vertex3f getPosition();
+    float getRadiousCollision();
 };
 
-#endif
-
-
+#endif // EGG_H

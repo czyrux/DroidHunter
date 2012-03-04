@@ -1,26 +1,26 @@
-#include "plantas.h"
+#include "plants.h"
 #include <iostream>
 
-Plantas::Plantas( int anchura , float scale) {
+Plants::Plants( int anchura , float scale) {
     this->_scale = scale;
     this->_width=anchura;
 
     string fichero,path="./resources/";
     fichero=path+"grass.ply";
-    planta = new Object3DPly((char *)fichero.c_str());
+    _plant = new Object3DPly((char *)fichero.c_str());
 
-    planta->setMaterial(bronzeColor);
+    _plant->setMaterial(bronzeColor);
 }
 
-Plantas::~Plantas() {
-    delete this->planta;
+Plants::~Plants() {
+    delete this->_plant;
 }
 
-void Plantas::draw( drawMode d) {
+void Plants::draw( drawMode d) {
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glScalef(_scale,_scale/2,_scale);
-    planta->draw(d);
+    _plant->draw(d);
     glPopMatrix();
 }

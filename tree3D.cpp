@@ -1,11 +1,11 @@
-#include "arbol.h"
+#include "tree3D.h"
 #include <iostream>
 
-Cylinder Arbol::_trunk(1.0,1.0,20);//inicializamos la variable estatica
-Cone Arbol::_leafs(1.0,1.0,20);
+Cylinder Tree3D::_trunk(1.0,1.0,20);//inicializamos la variable estatica
+Cone Tree3D::_leafs(1.0,1.0,20);
 
 
-Arbol::Arbol(_vertex3f position, float width , float hight) {
+Tree3D::Tree3D(_vertex3f position, float width , float hight) {
     this->_position=position;
     this->_width=width;
     this->_hight=hight;
@@ -14,15 +14,15 @@ Arbol::Arbol(_vertex3f position, float width , float hight) {
     this->_leafs.setMaterial(greenColor);
 }
 
-float Arbol::getCollisionRadius() {
+float Tree3D::getCollisionRadius() {
     return _width/2;
 }
 
-_vertex3f Arbol::getPosition() {
+_vertex3f Tree3D::getPosition() {
     return this->_position;
 }
 
-void Arbol::draw() {
+void Tree3D::draw() {
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glTranslatef(_position.x,_position.y,_position.z);
@@ -46,7 +46,7 @@ void Arbol::draw() {
     glPopMatrix();
 }
 
-void Arbol::parameters(_vertex3f position, float width , float hight) {
+void Tree3D::parameters(_vertex3f position, float width , float hight) {
     this->_position=position;
     this->_width=width;
     this->_hight=hight;

@@ -14,17 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    arbol.cpp \
     wasp.cpp \
     visoropengl.cpp \
-    ventana.cpp \
     starship.cpp \
     scene.cpp \
-    plantas.cpp \
     particle.cpp \
     objects.cpp \
     map.cpp \
-    huevo.cpp \
     file_ply_stl.cpp \
     droid.cpp \
     circle.cpp \
@@ -32,23 +28,24 @@ SOURCES += main.cpp\
     car.cpp \
     camera.cpp \
     ball_monster.cpp \
-    axis.cpp
+    axis.cpp \
+    tree3D.cpp \
+    egg.cpp \
+    plants.cpp \
+    window.cpp
 
 HEADERS  += mainwindow.h \
     wasp.h \
     visoropengl.h \
     vertex.h \
-    ventana.h \
     starship.h \
     scene.h \
     random.h \
-    plantas.h \
     particle.h \
     objects.h \
     matrix.h \
     materials.h \
     map.h \
-    huevo.h \
     hierarchyObject.h \
     file_ply_stl.h \
     droid.h \
@@ -58,7 +55,10 @@ HEADERS  += mainwindow.h \
     camera.h \
     ball_monster.h \
     axis.h \
-    arbol.h
+    tree3D.h \
+    egg.h \
+    plants.h \
+    window.h
 
 FORMS    += mainwindow.ui
 

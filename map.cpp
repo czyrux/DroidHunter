@@ -42,7 +42,7 @@ Map::Map( int width ) {
 
 
     //Colocamos varias plantas por la zona
-    _plants = new Plantas(10,0.03);
+    _plants = new Plants(10,0.03);
     _positionsPlants.clear();
     _vertex3f pos;
     pos.x=-100;pos.z=0;pos.y=0;

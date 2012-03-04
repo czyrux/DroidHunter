@@ -17,7 +17,7 @@ Scene::Scene(){
 
     pos.x=-100;pos.z=-100;pos.y=0;
     this->_primary = new Droid();
-
+    this->_primary->setColor(rojizoColor,blackColor);
     this->_secondary = new Ball();
     this->personaje = new Character (_primary,_secondary,this->numeroTicks,pos,scaleW);
     this->_personajeDied = NULL;
