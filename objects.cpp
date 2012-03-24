@@ -60,6 +60,8 @@ void _object3D::setMaterial(const material &m) {
     _colors._specular = m._specular;
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 void _object3D::compile() {
 
     _list[0] = glGenLists(1);
@@ -79,28 +81,29 @@ void _object3D::compile() {
 
     _list[3] = glGenLists(1);
     glNewList(_list[3], GL_COMPILE);
-    this->draw_chess();
+    this->drawChess();
     glEndList();
 
     _list[4] = glGenLists(1);
     glNewList(_list[4], GL_COMPILE);
-    this->draw_plane();
+    this->drawPlane();
     glEndList();
 
     _list[5] = glGenLists(1);
     glNewList(_list[5], GL_COMPILE);
-    this->draw_gouraud();
+    this->drawGouraud();
     glEndList();
 
     _list[6] = glGenLists(1);
     glNewList(_list[6], GL_COMPILE);
-    this->draw_texture();
+    this->drawTexture();
     glEndList();
 
     _compiled = true;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 void _object3D::drawPoints() {
     glColor3f(this->_colorRGB.r,this->_colorRGB.g,this->_colorRGB.b);
 
@@ -147,7 +150,7 @@ void _object3D::drawRGB(){
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void _object3D::draw_chess(){
+void _object3D::drawChess(){
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
     glBegin(GL_TRIANGLES);
@@ -164,7 +167,7 @@ void _object3D::draw_chess(){
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void _object3D::draw_plane(){ 
+void _object3D::drawPlane(){
 
     // Dibujado de las caras del objeto 3D
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -199,7 +202,7 @@ void _object3D::draw_plane(){
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void _object3D::draw_gouraud(){
+void _object3D::drawGouraud(){
     // Dibujado de las caras del objeto 3D
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     //glPolygonMode(GL_FRONT_AND_BACK,GL_LINES);
@@ -237,7 +240,7 @@ void _object3D::draw_gouraud(){
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void _object3D::draw_texture() {
+void _object3D::drawTexture() {
     glColor3f(1.0,1.0,1.0);
     glEnable(GL_TEXTURE_2D);
 
@@ -304,7 +307,7 @@ void _object3D::draw( drawMode d ) {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void _object3D::create_normals(){
+void _object3D::createNormals(){
     _vertex3f aux1, aux2,aux3 ;
 
     //Preparamos el vector de normales de los vertices
@@ -383,18 +386,19 @@ float _object3D::Zmin() { return this->_Zmin;}
 /*************************************************/
 
 Object3DPly::Object3DPly( char *fichero ){
-    this->create_object(fichero);
+    this->_path = fichero;
+    this->createObject();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Object3DPly::create_object( char *fichero){
+void Object3DPly::createObject( ){
     vector<float> v;
     vector<int> c;
 
     //leemos el fichero .ply
     _file_ply f;
-    f.open(fichero);
+    f.open(_path);
     f.read(v,c);
     f.close();
     _vertex3f aux;
@@ -416,91 +420,32 @@ void Object3DPly::create_object( char *fichero){
     }
 
     //Creamos las normales
-    this->create_normals();
+    this->createNormals();
 
     //Calculamos los extremos
     this->calculateBox();
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/*************************************************/
-//CLASS Cuadrilatero
-/*************************************************/
-Cuadrilatero::Cuadrilatero(_vertex3f v1,_vertex3f v2,_vertex3f v3,_vertex3f v4) {
-    this->_vertices.push_back(v1);
-    this->_vertices.push_back(v2);
-    this->_vertices.push_back(v3);
-    this->_vertices.push_back(v4);
-    this->create_object();
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-void Cuadrilatero::create_object(){
-    face aux;
-
-    //Cara 1
-    aux.v1=0;
-    aux.v2=1;
-    aux.v3=2;
-    _faces.push_back(aux);
-
-    //Cara 2
-    aux.v1=0;
-    aux.v2=2;
-    aux.v3=3;
-    _faces.push_back(aux);
-
-    //Cara 3
-    aux.v1=0;
-    aux.v2=1;
-    aux.v3=3;
-    _faces.push_back(aux);
-
-    //Cara 4
-    aux.v1=1;
-    aux.v2=2;
-    aux.v3=3;
-    _faces.push_back(aux);
-
-    //Creamos las normales
-    this->create_normals();
-
-    //Calculamos los extremos
-    this->calculateBox();
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-void Cuadrilatero::Parameters(_vertex3f v1,_vertex3f v2,_vertex3f v3,_vertex3f v4) {
-    this->_vertices.push_back(v1);
-    this->_vertices.push_back(v2);
-    this->_vertices.push_back(v3);
-    this->_vertices.push_back(v4);
-    this->create_object();
 }
 
 /*************************************************/
 //CLASS CONE
 /*************************************************/
 
-Cone::Cone(double radius , double hight , int faces){
+Cone::Cone(float radius , float hight , int faces){
     this->_radius=radius;
     this->_high=hight;
-    this->_num_faces=faces;
-    this->create_object();
+    this->_numFaces=faces;
+    this->createObject();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-double Cone::getHight() { return this->_high;}
-int Cone::getNumFaces() { return this->_num_faces; }
-double Cone::getRadius() { return this->_radius; }
+float Cone::getHight() { return this->_high;}
+int Cone::getNumFaces() { return this->_numFaces; }
+float Cone::getRadius() { return this->_radius; }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Cone::create_object(){
+void Cone::createObject(){
     this->_vertices.clear();
     this->_faces.clear();
     _vertex3f v1;
@@ -508,10 +453,10 @@ void Cone::create_object(){
 
     //CREAMOS LOS PUNTOS
     //Creamos el circulo inferior
-    for ( int i=0 ; i<this->_num_faces ; i++) {
-        v1.x=this->_radius*cos( (2*PI*i)/this->_num_faces);
+    for ( int i=0 ; i<this->_numFaces ; i++) {
+        v1.x=this->_radius*cos( (2*PI*i)/this->_numFaces);
         v1.y=-this->_high/2;
-        v1.z=this->_radius*sin( (2*PI*i)/this->_num_faces);
+        v1.z=this->_radius*sin( (2*PI*i)/this->_numFaces);
         this->_vertices.push_back(v1);
     }
     //Ponemos el centro inferior
@@ -528,22 +473,22 @@ void Cone::create_object(){
     //CREAMOS LAS CARAS
     //laterales (sentido antihorario)
     f.v1=_vertices.size()-1;
-    for (int i=0 ; i<_num_faces ; i++ ){
+    for (int i=0 ; i<_numFaces ; i++ ){
         f.v2=i+1;
-        if (i!=_num_faces-1)
+        if (i!=_numFaces-1)
             f.v3=i;
         else {
             f.v2 = 0 ;
-            f.v3=_num_faces-1;
+            f.v3=_numFaces-1;
         }
         _faces.push_back(f);
     }
 
     //tapa inferior
     f.v1=_vertices.size()-2;
-    for (int i=0 ; i<_num_faces ; i++ ) {
+    for (int i=0 ; i<_numFaces ; i++ ) {
             f.v2=i;
-            if (i!=_num_faces-1)
+            if (i!=_numFaces-1)
                 f.v3=i+1;
             else
                 f.v3=0;
@@ -551,7 +496,7 @@ void Cone::create_object(){
     }
 
     //CREAMOS LAS NORMALES
-    this->create_normals();
+    this->createNormals();
 
     //Calculamos los extremos
     this->calculateBox();
@@ -559,11 +504,11 @@ void Cone::create_object(){
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Cone::Parameters(double radio , double altura , int caras){
+void Cone::Parameters(float radio , float altura , int caras){
         this->_radius=radio;
         this->_high=altura;
-        this->_num_faces=caras;
-        this->create_object();
+        this->_numFaces=caras;
+        this->createObject();
 }
 
 /*************************************************/
@@ -571,12 +516,12 @@ void Cone::Parameters(double radio , double altura , int caras){
 /*************************************************/
 Cube::Cube(float lado){
     this->_side=lado;
-    this->create_object();
+    this->createObject();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Cube::create_object(){
+void Cube::createObject(){
     this->_vertices.clear();
     this->_faces.clear();
     face f;
@@ -639,7 +584,7 @@ void Cube::create_object(){
     _faces.push_back(f);
 
     //Creamos las normales
-    this->create_normals();
+    this->createNormals();
 
     //Calculamos los extremos
     this->calculateBox();
@@ -649,12 +594,13 @@ void Cube::create_object(){
 
 void Cube::Parameters(float lado){
     this->_side=lado;
-    this->create_object();
+    this->createObject();
 }
 
 float Cube::getSide() {
     return this->_side;
 }
+
 /*************************************************/
 //CLASS CILINDRO
 /*************************************************/
@@ -662,13 +608,13 @@ float Cube::getSide() {
 Cylinder::Cylinder(float radio, float altura , int caras){
     this->_radius=radio;
     this->_high=altura;
-    this->_num_faces=caras;
-    this->create_object();
+    this->_numFaces=caras;
+    this->createObject();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Cylinder::create_object(){
+void Cylinder::createObject(){
     this->_vertices.clear();
     this->_faces.clear();
 
@@ -677,17 +623,17 @@ void Cylinder::create_object(){
 
     //PUNTOS
     //Creamos el circulo inferior
-    for ( int i=0 ; i<this->_num_faces ; i++) {
-        v1.x=this->_radius*cos( (2*PI*i)/this->_num_faces);
+    for ( int i=0 ; i<this->_numFaces ; i++) {
+        v1.x=this->_radius*cos( (2*PI*i)/this->_numFaces);
         v1.y=-this->_high/2;
-        v1.z=this->_radius*sin( (2*PI*i)/this->_num_faces);
+        v1.z=this->_radius*sin( (2*PI*i)/this->_numFaces);
         this->_vertices.push_back(v1);
     }
     //Creamos el circulo superior
-    for ( int i=0 ; i<this->_num_faces ; i++) {
-        v1.x=this->_radius*cos( (2*PI*i)/this->_num_faces);
+    for ( int i=0 ; i<this->_numFaces ; i++) {
+        v1.x=this->_radius*cos( (2*PI*i)/this->_numFaces);
         v1.y=this->_high/2;
-        v1.z=this->_radius*sin( (2*PI*i)/this->_num_faces);
+        v1.z=this->_radius*sin( (2*PI*i)/this->_numFaces);
         this->_vertices.push_back(v1);
     }
     //Ponemos el centro inferior
@@ -704,9 +650,9 @@ void Cylinder::create_object(){
     //CARAS
     //tapa inferior
     f.v1=_vertices.size()-2;
-    for (int i=0 ; i<_num_faces ; i++ ) {
+    for (int i=0 ; i<_numFaces ; i++ ) {
         f.v2=i;
-        if (i!=_num_faces-1)
+        if (i!=_numFaces-1)
             f.v3=i+1;
         else
             f.v3=0;
@@ -714,58 +660,38 @@ void Cylinder::create_object(){
     }
     //tapa superior
     f.v1=_vertices.size()-1;
-    for (int i=_num_faces ; i<(_num_faces*2) ; i++ ) {
+    for (int i=_numFaces ; i<(_numFaces*2) ; i++ ) {
         f.v2=i+1;
-        if (i!=(_num_faces*2)-1)
+        if (i!=(_numFaces*2)-1)
             f.v3=i;
         else {
             f.v3=i;
-            f.v2 = _num_faces;
+            f.v2 = _numFaces;
         }
         _faces.push_back(f);
     }
     //caras laterales
-    for (int i=0 ; i<_num_faces ; i++ ) {
+    for (int i=0 ; i<_numFaces ; i++ ) {
         f.v1=i+1;
-        if (i!=(_num_faces-1)){
+        if (i!=(_numFaces-1)){
             f.v2=i;
-            f.v3=i+_num_faces;
+            f.v3=i+_numFaces;
             _faces.push_back(f);
             f.v2=f.v3;
-            f.v3=i+_num_faces+1;
+            f.v3=i+_numFaces+1;
         }else {
             f.v1 = 0;
-            f.v2= _num_faces-1;
-            f.v3=i+_num_faces;
+            f.v2= _numFaces-1;
+            f.v3=i+_numFaces;
             _faces.push_back(f);
             f.v2=f.v3;
-            f.v3=_num_faces;
+            f.v3=_numFaces;
         }
         _faces.push_back(f);
     }
-/*    //caras laterales ORIGINAL
-    for (int i=0 ; i<num_caras ; i++ ) {
-        f.v1=i;
-        if (i!=(num_caras-1)){
-            f.v2=i+1;
-            f.v3=i+num_caras;
-            caras.push_back(f);
-            f.v1=f.v2;
-            f.v2=f.v3;
-            f.v3=i+num_caras+1;
-        }else {
-            f.v2=0;
-            f.v3=i+num_caras;
-            caras.push_back(f);
-            f.v1=f.v2;
-            f.v2=f.v3;
-            f.v3=num_caras;
-        }
-        caras.push_back(f);
-    }
-*/
+
     //Creamos las normales
-    this->create_normals();
+    this->createNormals();
 
     //Calculamos los extremos
     this->calculateBox();
@@ -776,8 +702,8 @@ void Cylinder::create_object(){
 void Cylinder::Parameters(float radio, float altura , int caras){
     this->_radius=radio;
     this->_high=altura;
-    this->_num_faces=caras;
-    this->create_object();
+    this->_numFaces=caras;
+    this->createObject();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -789,7 +715,15 @@ float Cylinder::getRadius() { return _radius; }
 //CLASS Sphere
 /*************************************************/
 
-void Sphere::create_object() {
+Sphere::Sphere(float radio, int caras) {
+    this->_radius=radio;
+    this->_numFaces=caras;
+    this->createObject();
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void Sphere::createObject() {
 
     this->_vertices.clear();
     this->_faces.clear();
@@ -802,9 +736,9 @@ void Sphere::create_object() {
     int inicio;
 
     //Creamos media esfera vertical
-    for ( int i=0 ; i<this->_num_faces/2+1 ; i++) {
-        v1.x=this->_radius*sin( (2*PI*i)/this->_num_faces);
-        v1.y=this->_radius*cos( (2*PI*i)/this->_num_faces);
+    for ( int i=0 ; i<this->_numFaces/2+1 ; i++) {
+        v1.x=this->_radius*sin( (2*PI*i)/this->_numFaces);
+        v1.y=this->_radius*cos( (2*PI*i)/this->_numFaces);
         v1.z=0;
         aux.push_back(v1);
     }
@@ -814,10 +748,10 @@ void Sphere::create_object() {
     for (int i=1 ; i<aux.size()-1;i++) {
         h=aux[i].y;
         r=aux[i].x;
-        for ( int j=0 ; j<this->_num_faces ; j++ ){
-            v1.x=r*cos( (2*PI*j)/this->_num_faces);
+        for ( int j=0 ; j<this->_numFaces ; j++ ){
+            v1.x=r*cos( (2*PI*j)/this->_numFaces);
             v1.y=h;
-            v1.z=r*sin( (2*PI*j)/this->_num_faces);
+            v1.z=r*sin( (2*PI*j)/this->_numFaces);
             this->_vertices.push_back(v1);
         }
     }
@@ -826,22 +760,22 @@ void Sphere::create_object() {
     //FORMAMOS LAS CARAS
     //pico superior
     f.v1=0;
-    for (int i=1 ; i<_num_faces+1 /*num_caras+1*/ ; i++ ) {
+    for (int i=1 ; i<_numFaces+1 ; i++ ) {
         f.v2=i+1;
-        if (i!=_num_faces)
+        if (i!=_numFaces)
             f.v3=i;
         else {
             f.v2=1;
-            f.v3=_num_faces;
+            f.v3=_numFaces;
         }
         _faces.push_back(f);
     }
     //pico inferior
     f.v1=_vertices.size()-1;
-    inicio=(aux.size()-3)*this->_num_faces+1;
-    for (int i=inicio ; i<(aux.size()-2)*this->_num_faces+1 ; i++ ) {
+    inicio=(aux.size()-3)*this->_numFaces+1;
+    for (int i=inicio ; i<(aux.size()-2)*this->_numFaces+1 ; i++ ) {
         f.v2=i;
-        if (i!=(aux.size()-2)*this->_num_faces)
+        if (i!=(aux.size()-2)*this->_numFaces)
             f.v3=i+1;
         else
             f.v3=inicio;
@@ -851,29 +785,29 @@ void Sphere::create_object() {
     //creamos las caras centrales
     for ( int i=0 ; i<aux.size()-3 ; i++ ) {
 
-        for (int j=_num_faces*i+1 ; j<(_num_faces*i+_num_faces)+1 ; j++ ) {
+        for (int j=_numFaces*i+1 ; j<(_numFaces*i+_numFaces)+1 ; j++ ) {
             f.v1=j;
-            if (j!=(_num_faces*i+_num_faces)){
+            if (j!=(_numFaces*i+_numFaces)){
                 f.v2=j+1;
-                f.v3=j+_num_faces;
+                f.v3=j+_numFaces;
                 _faces.push_back(f);
                 f.v1=f.v2;
-                f.v2=j+_num_faces+1;
+                f.v2=j+_numFaces+1;
                 f.v3=f.v3;
             }else {
-                f.v2=_num_faces*i+1;
-                f.v3=j+_num_faces;
+                f.v2=_numFaces*i+1;
+                f.v3=j+_numFaces;
                 _faces.push_back(f);
                 f.v1=f.v2;
                 f.v3=f.v3;
-                f.v2=_num_faces*i+1+_num_faces;
+                f.v2=_numFaces*i+1+_numFaces;
             }
             _faces.push_back(f);
         }
     }
 
     //creamos las normales
-    create_normals();
+    createNormals();
 
     //Calculamos los extremos
     this->calculateBox();
@@ -881,31 +815,29 @@ void Sphere::create_object() {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Sphere::Sphere(float radio, int caras) {
-    this->_radius=radio;
-    this->_num_faces=caras;
-    this->create_object();
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 void Sphere::Parameters(float radio , int caras) {
     this->_radius=radio;
-    this->_num_faces=caras;
-    this->create_object();
+    this->_numFaces=caras;
+    this->createObject();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-float Sphere::getRadius() {
-    return this->_radius;
-}
+float Sphere::getRadius() { return this->_radius; }
 
 /*************************************************/
 //CLASS SemiEsfera
 /*************************************************/
 
-void SemiSphere::create_object() {
+SemiSphere::SemiSphere(float radio, int caras) {
+    this->_radius=radio;
+    this->_numFaces=caras;
+    this->createObject();
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void SemiSphere::createObject() {
     this->_vertices.clear();
     this->_faces.clear();
 
@@ -916,12 +848,12 @@ void SemiSphere::create_object() {
     face f;
 
     //Creamos media semiSphere vertical
-    for ( int i=0 ; i<this->_num_faces/4+2 ; i++) {
-        v1.x=this->_radius*sin( (2*PI*i)/this->_num_faces);
-        v1.y=this->_radius*cos( (2*PI*i)/this->_num_faces);
+    for ( int i=0 ; i<this->_numFaces/4+2 ; i++) {
+        v1.x=this->_radius*sin( (2*PI*i)/this->_numFaces);
+        v1.y=this->_radius*cos( (2*PI*i)/this->_numFaces);
         v1.z=0;
         aux.push_back(v1);
-        if ( i == this->_num_faces/4+1) {
+        if ( i == this->_numFaces/4+1) {
             v1.x = v1.z = 0;
             aux.push_back(v1);
         }
@@ -932,10 +864,10 @@ void SemiSphere::create_object() {
     for (int i=1 ; i<aux.size()-1;i++) {
         h=aux[i].y;
         r=aux[i].x;
-        for ( int j=0 ; j<this->_num_faces ; j++ ){
-            v1.x=r*cos( (2*PI*j)/this->_num_faces);
+        for ( int j=0 ; j<this->_numFaces ; j++ ){
+            v1.x=r*cos( (2*PI*j)/this->_numFaces);
             v1.y=h;
-            v1.z=r*sin( (2*PI*j)/this->_num_faces);
+            v1.z=r*sin( (2*PI*j)/this->_numFaces);
             this->_vertices.push_back(v1);
         }
     }
@@ -944,13 +876,13 @@ void SemiSphere::create_object() {
     //FORMAMOS LAS CARAS
     //pico superior
     f.v1=0;
-    for (int i=1 ; i<_num_faces+1 ; i++ ) {
+    for (int i=1 ; i<_numFaces+1 ; i++ ) {
         f.v2=i+1;
-        if (i!=_num_faces)
+        if (i!=_numFaces)
             f.v3=i;
         else{
             f.v2=1;
-            f.v3=_num_faces;
+            f.v3=_numFaces;
         }
         _faces.push_back(f);
     }
@@ -958,22 +890,22 @@ void SemiSphere::create_object() {
     //creamos las caras centrales
     for ( int i=0 ; i<aux.size()-3 ; i++ ) {
 
-        for (int j=_num_faces*i+1 ; j<(_num_faces*i+_num_faces)+1 ; j++ ) {
+        for (int j=_numFaces*i+1 ; j<(_numFaces*i+_numFaces)+1 ; j++ ) {
             f.v1=j;
-            if (j!=(_num_faces*i+_num_faces)){
+            if (j!=(_numFaces*i+_numFaces)){
                 f.v2=j+1;
-                f.v3=j+_num_faces;
+                f.v3=j+_numFaces;
                 _faces.push_back(f);
                 f.v1=f.v2;
-                f.v2=j+_num_faces+1;
+                f.v2=j+_numFaces+1;
                 f.v3=f.v3;
             }else {
-                f.v2=_num_faces*i+1;
-                f.v3=j+_num_faces;
+                f.v2=_numFaces*i+1;
+                f.v3=j+_numFaces;
                 _faces.push_back(f);
                 f.v1=f.v2;
                 f.v3=f.v3;
-                f.v2=_num_faces*i+1+_num_faces;
+                f.v2=_numFaces*i+1+_numFaces;
             }
             _faces.push_back(f);
         }
@@ -981,10 +913,10 @@ void SemiSphere::create_object() {
 
     //tampamos por debajo
     f.v1=_vertices.size()-1;
-    int inicio=(aux.size()-3)*this->_num_faces+1;
-    for (int i=inicio ; i<(aux.size()-2)*this->_num_faces+1 ; i++ ) {
+    int inicio=(aux.size()-3)*this->_numFaces+1;
+    for (int i=inicio ; i<(aux.size()-2)*this->_numFaces+1 ; i++ ) {
         f.v2=i;
-        if (i!=(aux.size()-2)*this->_num_faces)
+        if (i!=(aux.size()-2)*this->_numFaces)
             f.v3=i+1;
         else
             f.v3=inicio;
@@ -992,7 +924,7 @@ void SemiSphere::create_object() {
     }
 
     //creamos las normales
-    create_normals();
+    createNormals();
 
     //Calculamos los extremos
     this->calculateBox();
@@ -1000,31 +932,29 @@ void SemiSphere::create_object() {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-SemiSphere::SemiSphere(float radio, int caras) {
-    this->_radius=radio;
-    this->_num_faces=caras;
-    this->create_object();
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 void SemiSphere::Parameters(float radio , int caras) {
     this->_radius=radio;
-    this->_num_faces=caras;
-    this->create_object();
+    this->_numFaces=caras;
+    this->createObject();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-float SemiSphere::getRadius() {
-    return this->_radius;
-}
+float SemiSphere::getRadius() { return this->_radius; }
 
 /*************************************************/
 //CLASS Piramide
 /*************************************************/
 
-void Pyramid::create_object() {
+Pyramid::Pyramid(float hight, float side) {
+    this->_high = hight;
+    this->_side = side;
+    this->createObject();
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void Pyramid::createObject() {
     this->_vertices.clear();
     this->_faces.clear();
     face f;
@@ -1067,7 +997,7 @@ void Pyramid::create_object() {
     }
 
     //creamos las normales
-    create_normals();
+    createNormals();
 
     //Calculamos los extremos
     this->calculateBox();
@@ -1075,28 +1005,13 @@ void Pyramid::create_object() {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Pyramid::Pyramid(float hight, float side) {
-    this->_high = hight;
-    this->_side = side;
-    this->create_object();
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 void Pyramid::Parameters(float hight, float side ) {
     this->_high = hight;
     this->_side = side;
-    this->create_object();
+    this->createObject();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-float Pyramid::getHigh() {
-    return this->_high;
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-float Pyramid::getSide() {
-    return this->_side;
-}
+float Pyramid::getHigh() { return this->_high; }
+float Pyramid::getSide() { return this->_side; }

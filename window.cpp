@@ -13,7 +13,6 @@
      setWindowTitle(tr("IG[2010-...]. czyrux"));
      //resize(1280,800);
      resize(1000,800);
-
  }
 
 

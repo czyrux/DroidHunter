@@ -80,17 +80,19 @@ protected:
     GLuint _list[6] ;
     bool _compiled;
 
-    void create_normals();
+    void createNormals();
     void calculateBox();
     void compile();
 
     void drawPoints();
     void drawLines();
     void drawRGB();
-    void draw_chess();
-    void draw_plane();
-    void draw_gouraud();
-    void draw_texture();
+    void drawChess();
+    void drawPlane();
+    void drawGouraud();
+    void drawTexture();
+
+    virtual void createObject()=0;
 
 public:
     _object3D();
@@ -124,22 +126,10 @@ public:
  * 3D en formato .ply
  */
 class Object3DPly : public _object3D {
-    void create_object( char *);
+    char *_path;
+    void createObject();
 public:
     Object3DPly( char *);
-};
-
-/*************************************************/
-//CLASS CUADRILATERO
-/*************************************************/
-/**
- * @brief Clase que implementa un cuadrilatero en 3D.
- */
-class Cuadrilatero: public _object3D {
-    void create_object();
-public:
-    Cuadrilatero(_vertex3f,_vertex3f,_vertex3f,_vertex3f);
-    void Parameters(_vertex3f,_vertex3f,_vertex3f,_vertex3f);
 };
 
 /*************************************************/
@@ -150,15 +140,15 @@ public:
  */
 class Cone: public _object3D {
 private:
-    double _radius;
-    double _high;
-    int _num_faces;
-    void create_object();
+    float _radius;
+    float _high;
+    int _numFaces;
+    void createObject();
 public:
-    Cone(double radius=1.0 ,double high=1.0 ,int faces=20);
-    void Parameters(double radius=1.0 ,double high=1.0 ,int faces=10);
-    double getHight();
-    double getRadius();
+    Cone(float radius=1.0 ,float high=1.0 ,int faces=20);
+    void Parameters(float radius=1.0 ,float high=1.0 ,int faces=10);
+    float getHight();
+    float getRadius();
     int getNumFaces();
 };
 
@@ -171,7 +161,7 @@ public:
 class Cube: public _object3D {
 private:
     float _side;
-    void create_object();
+    void createObject();
 public:
     Cube(float side=1.0);
     void Parameters(float side=1.0);
@@ -188,8 +178,9 @@ class Cylinder: public _object3D {
 private:
     float _radius;
     float _high;
-    int _num_faces;
-    void create_object();
+    int _numFaces;
+    void createObject();
+
 public:
     Cylinder(float radius=1.0, float high=1.0 , int faces=20);
     void Parameters(float radius=1.0, float high=1.0 , int faces=20);
@@ -207,8 +198,8 @@ public:
 class Sphere: public _object3D {
 private:
     float _radius;
-    int _num_faces;
-    void create_object();
+    int _numFaces;
+    void createObject();
 public:
     Sphere(float radius=1.0, int faces=20);
     void Parameters(float radius=1.0 , int faces=20 );
@@ -224,8 +215,8 @@ public:
 class SemiSphere: public _object3D {
 private:
     float _radius;
-    int _num_faces;
-    void create_object();
+    int _numFaces;
+    void createObject();
 public:
     SemiSphere(float radius=1.0, int faces=20);
     void Parameters(float radius=1.0 , int faces=20 );
@@ -242,9 +233,9 @@ class Pyramid: public _object3D {
 private:
     float _high;
     float _side;
-    void create_object();
+    void createObject();
 public:
-    Pyramid(float hight=1.0, float side=1.0);
+    Pyramid(float hight=1.0, float side=1.0) ;
     void Parameters(float hight=1.0, float side=1.0 );
     float getSide();
     float getHigh();
