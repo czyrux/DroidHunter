@@ -7,7 +7,7 @@
 /*************************************************************************/
 /**
  * @file objects.h
- * @brief Define the class object3D, such that the follows objects 3D:
+ * @brief Define the abstract class object3D, such that the follows objects 3D:
  *      objectPly3D, Sphere, SemiSphere, Pyramid, Triangle, Square
  * @author Antonio Gutierrez Martinez
  *
@@ -39,10 +39,10 @@
 #include "file_ply_stl.h"
 #include "materials.h"
 
-using namespace std;
+//using namespace std;
 
 /**
- * @brief Estructura usada para definir una cara.
+ * @brief Structure used to define a face.
  */
 struct face {
     int v1;
@@ -51,7 +51,7 @@ struct face {
 };
 
 /**
- * @brief Distintos modos de dibujado
+ * @brief Define the different ways for draw an object.
  */
 enum drawMode { points , lines , rgb ,  chess , plane , gouraud , texture };
 
@@ -59,62 +59,187 @@ enum drawMode { points , lines , rgb ,  chess , plane , gouraud , texture };
 //CLASS _OBJECT3D
 /*************************************************/
 /**
- * @brief Clase abstracta objeto 3D.
+ * @brief Abstract class of an object 3D that define the main characteristics and
+ * behaviour of an object 3D.
  */
-class _object3D {
+class _object3D
+{
 protected:
+    /** @brief Holds the minimum value of coordenate Y in object */
     float _Ymin;
+    /** @brief Holds the maximum value of coordenate Y in object */
     float _Ymax;
+    /** @brief Holds the maximum value of coordenate X in object */
     float _Xmax;
+    /** @brief Holds the minimum value of coordenate X in object */
     float _Xmin;
+    /** @brief Holds the maximum value of coordenate Z in object */
     float _Zmax;
+    /** @brief Holds the minimum value of coordenate Z in object */
     float _Zmin;
+
+    /** @brief Array that holds the vertices of object 3D */
     vector<_vertex3f> _vertices;
+    /** @brief Array that holds the face of object */
     vector<face> _faces;
+    /** @brief Array that holds the normal vector of a vertex using for intensity of light */
     vector<_vertex3f> _normal_vertices;
+    /** @brief Array that holds the normal vector of a face using for intensity of light*/
     vector<_vertex3f> _normal_faces;
+
+    /** @brief Holds the RGB color of object */
     _vertex3f _colorRGB;
+    /** @brief Holds the material color of object */
     material _colors;
+   /** @brief Object of class Qimage using for store the image for a texture */
     QImage _image;
+    /** @brief Holds the value of the texture previously charged */
     GLuint _texture ;
+
+    /** @brief Array that holds the display lists with the differences types of show the object */
     GLuint _list[6] ;
+    /** @brief Boolean value used to know if the display lists are charged or not */
     bool _compiled;
 
+    /**
+      * @brief Calculate the normals of vertex and faces.
+      */
     void createNormals();
+    /**
+      * @brief Calculate value of box that involve the object.
+      */
     void calculateBox();
+    /**
+      * @brief Compile the display lists.
+      */
     void compile();
 
+    /**
+      * @brief Draw object in mode points.
+      */
     void drawPoints();
+    /**
+      * @brief Draw object in mode lines.
+      */
     void drawLines();
+    /**
+      * @brief Draw object using RGB color.
+      */
     void drawRGB();
+    /**
+      * @brief Draw object in mode chess.
+      */
     void drawChess();
+    /**
+      * @brief Draw object in mode plane.
+      */
     void drawPlane();
+    /**
+      * @brief Draw object in mode gouraud.
+      */
     void drawGouraud();
+    /**
+      * @brief Draw object with texture.
+      */
     void drawTexture();
 
+    /**
+      * @brief Abstract method who creates the object 3D.
+      */
     virtual void createObject()=0;
 
 public:
+    /**
+      * @brief Constructor of class
+      */
     _object3D();
+    /**
+      * @brief Destructor of class
+      */
     ~_object3D();
 
+    /**
+      * @brief Set color RGB for object
+      * @param c Vertex that define the color
+      */
     void setColor ( const _vertex3f &c);
+    /**
+      * @brief Get color RGB.
+      * @return vertex that holds the color.
+      */
     _vertex3f getColor ();
+    /**
+      * @brief Set vertices to object
+      * @param v array of _vertex3f
+      */
     void setVertices( const vector<_vertex3f> &v);
+    /**
+      * @brief Get vertices of object.
+      * @return array of _vertex3f that holds the vertices.
+      */
     vector<_vertex3f> getVertices();
+    /**
+      * @brief Set faces of object.
+      * @param v array of faces.
+      */
     void setFaces( const vector<face> &v);
+    /**
+      * @brief Get faces of object.
+      * @return array that holds the faces of object.
+      */
     vector<face> getFaces();
+    /**
+      * @brief Set material color to the object.
+      * @param m material that holds the color.
+      */
     void setMaterial( const material &);
+    /**
+      * @brief Set texture to the object.
+      * @param file path with the texture.
+      */
     void setTexture ( const char * );
 
+    /**
+      * @brief Draw the object depending of the drawMode passed in the function.
+      * @param d drawMode
+      */
     void draw ( drawMode d );
 
+    /**
+      * @brief Get the collision radious of the object.
+      * @return the radious.
+      */
     float collisionRadius();
+    /**
+      * @brief
+      * @return
+      */
     float Ymin();
+    /**
+      * @brief
+      * @return
+      */
     float Ymax();
+    /**
+      * @brief
+      * @return
+      */
     float Xmax();
+    /**
+      * @brief
+      * @return
+      */
     float Xmin();
+    /**
+      * @brief
+      * @return
+      */
     float Zmax();
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     float Zmin();
 };
 
@@ -125,10 +250,25 @@ public:
  * @brief Implementacion de la clase objeto Ply. Clase usada para cargar un objeto
  * 3D en formato .ply
  */
-class Object3DPly : public _object3D {
+class Object3DPly : public _object3D
+{
+private:
+    /** @brief  */
     char *_path;
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void createObject();
+
 public:
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     Object3DPly( char *);
 };
 
@@ -140,15 +280,50 @@ public:
  */
 class Cone: public _object3D {
 private:
+    /** @brief  */
     float _radius;
+    /** @brief  */
     float _high;
+    /** @brief  */
     int _numFaces;
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void createObject();
+
 public:
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     Cone(float radius=1.0 ,float high=1.0 ,int faces=20);
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void Parameters(float radius=1.0 ,float high=1.0 ,int faces=10);
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     float getHight();
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     float getRadius();
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     int getNumFaces();
 };
 
@@ -160,11 +335,34 @@ public:
  */
 class Cube: public _object3D {
 private:
+    /** @brief  */
     float _side;
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void createObject();
+
 public:
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     Cube(float side=1.0);
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void Parameters(float side=1.0);
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     float getSide();
 };
 
@@ -176,16 +374,50 @@ public:
  */
 class Cylinder: public _object3D {
 private:
+    /** @brief  */
     float _radius;
+    /** @brief  */
     float _high;
+    /** @brief  */
     int _numFaces;
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void createObject();
 
 public:
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     Cylinder(float radius=1.0, float high=1.0 , int faces=20);
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void Parameters(float radius=1.0, float high=1.0 , int faces=20);
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     float getHigh();
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     float getRadius();
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     int getNumFaces();
 };
 
@@ -197,12 +429,35 @@ public:
  */
 class Sphere: public _object3D {
 private:
+    /** @brief  */
     float _radius;
+    /** @brief  */
     int _numFaces;
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void createObject();
 public:
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     Sphere(float radius=1.0, int faces=20);
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void Parameters(float radius=1.0 , int faces=20 );
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     float getRadius();
 };
 
@@ -214,12 +469,36 @@ public:
  */
 class SemiSphere: public _object3D {
 private:
+    /** @brief  */
     float _radius;
+    /** @brief  */
     int _numFaces;
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void createObject();
+
 public:
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     SemiSphere(float radius=1.0, int faces=20);
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void Parameters(float radius=1.0 , int faces=20 );
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     float getRadius();
 };
 
@@ -231,13 +510,42 @@ public:
  */
 class Pyramid: public _object3D {
 private:
+    /** @brief  */
     float _high;
+    /** @brief  */
     float _side;
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void createObject();
+
 public:
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     Pyramid(float hight=1.0, float side=1.0) ;
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void Parameters(float hight=1.0, float side=1.0 );
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     float getSide();
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     float getHigh();
 };
 
