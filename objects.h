@@ -65,19 +65,6 @@ enum drawMode { points , lines , rgb ,  chess , plane , gouraud , texture };
 class _object3D
 {
 protected:
-    /** @brief Holds the minimum value of coordenate Y in object */
-    float _Ymin;
-    /** @brief Holds the maximum value of coordenate Y in object */
-    float _Ymax;
-    /** @brief Holds the maximum value of coordenate X in object */
-    float _Xmax;
-    /** @brief Holds the minimum value of coordenate X in object */
-    float _Xmin;
-    /** @brief Holds the maximum value of coordenate Z in object */
-    float _Zmax;
-    /** @brief Holds the minimum value of coordenate Z in object */
-    float _Zmin;
-
     /** @brief Array that holds the vertices of object 3D */
     vector<_vertex3f> _vertices;
     /** @brief Array that holds the face of object */
@@ -96,11 +83,6 @@ protected:
     /** @brief Holds the value of the texture previously charged */
     GLuint _texture ;
 
-    /** @brief Array that holds the display lists with the differences types of show the object */
-    GLuint _list[6] ;
-    /** @brief Boolean value used to know if the display lists are charged or not */
-    bool _compiled;
-
     /**
       * @brief Calculate the normals of vertex and faces.
       */
@@ -109,6 +91,31 @@ protected:
       * @brief Calculate value of box that involve the object.
       */
     void calculateBox();
+
+    /**
+      * @brief Abstract method who creates the object 3D.
+      */
+    virtual void createObject()=0;
+
+private:
+    /** @brief Holds the minimum value of coordenate Y in object */
+    float _Ymin;
+    /** @brief Holds the maximum value of coordenate Y in object */
+    float _Ymax;
+    /** @brief Holds the maximum value of coordenate X in object */
+    float _Xmax;
+    /** @brief Holds the minimum value of coordenate X in object */
+    float _Xmin;
+    /** @brief Holds the maximum value of coordenate Z in object */
+    float _Zmax;
+    /** @brief Holds the minimum value of coordenate Z in object */
+    float _Zmin;
+
+    /** @brief Array that holds the display lists with the differences types of show the object */
+    GLuint _list[6] ;
+    /** @brief Boolean value used to know if the display lists are charged or not */
+    bool _compiled;
+
     /**
       * @brief Compile the display lists.
       */
@@ -143,11 +150,6 @@ protected:
       */
     void drawTexture();
 
-    /**
-      * @brief Abstract method who creates the object 3D.
-      */
-    virtual void createObject()=0;
-
 public:
     /**
       * @brief Constructor of class
@@ -168,26 +170,18 @@ public:
       * @return vertex that holds the color.
       */
     _vertex3f getColor ();
-    /**
-      * @brief Set vertices to object
-      * @param v array of _vertex3f
-      */
-    void setVertices( const vector<_vertex3f> &v);
+
     /**
       * @brief Get vertices of object.
       * @return array of _vertex3f that holds the vertices.
       */
     vector<_vertex3f> getVertices();
     /**
-      * @brief Set faces of object.
-      * @param v array of faces.
-      */
-    void setFaces( const vector<face> &v);
-    /**
       * @brief Get faces of object.
       * @return array that holds the faces of object.
       */
     vector<face> getFaces();
+
     /**
       * @brief Set material color to the object.
       * @param m material that holds the color.
@@ -206,68 +200,34 @@ public:
     void draw ( drawMode d );
 
     /**
-      * @brief Get the collision radious of the object.
-      * @return the radious.
+      * @brief Get the collision radius of the object.
+      * @return the radius.
       */
     float collisionRadius();
-    /**
-      * @brief
-      * @return
-      */
-    float Ymin();
-    /**
-      * @brief
-      * @return
-      */
-    float Ymax();
-    /**
-      * @brief
-      * @return
-      */
-    float Xmax();
-    /**
-      * @brief
-      * @return
-      */
-    float Xmin();
-    /**
-      * @brief
-      * @return
-      */
-    float Zmax();
-    /**
-      * @brief
-      * @param
-      * @return
-      */
-    float Zmin();
 };
 
 /*************************************************/
 //CLASS OBJECTPLY
 /*************************************************/
 /**
- * @brief Implementacion de la clase objeto Ply. Clase usada para cargar un objeto
- * 3D en formato .ply
+ * @brief Class that implement a object PLY. Is used to charge
+ * an object in ply format.
  */
 class Object3DPly : public _object3D
 {
 private:
-    /** @brief  */
+    /** @brief Holds the path of file .ply */
     char *_path;
 
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Create the geometry of object
       */
     void createObject();
 
 public:
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Constructor of class
+      * @param file file with the data of .ply object
       */
     Object3DPly( char *);
 };
@@ -276,53 +236,50 @@ public:
 //CLASS CONE
 /*************************************************/
 /**
- * @brief Clase que implementa un cono en 3D.
+ * @brief Class that implement a cone in 3D.
  */
 class Cone: public _object3D {
 private:
-    /** @brief  */
+    /** @brief Holds radiuos of object */
     float _radius;
-    /** @brief  */
+    /** @brief Holds high of cone */
     float _high;
-    /** @brief  */
+    /** @brief Holds number of lateral faces of cone */
     int _numFaces;
 
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Create the geometry of object
       */
     void createObject();
 
 public:
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Constructor of class
+      * @param radius of object. Default value 1.0
+      * @param high of object. Default value 1.0
+      * @param faces of object. Default value 20
       */
     Cone(float radius=1.0 ,float high=1.0 ,int faces=20);
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Change the parameters of object
+      * @param radius of object. Default value 1.0
+      * @param high of object. Default value 1.0
+      * @param faces of object. Default value 20
       */
     void Parameters(float radius=1.0 ,float high=1.0 ,int faces=10);
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Get high of object
+      * @return value of high
       */
-    float getHight();
+    float getHigh();
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Get radius of object
+      * @return value of radius
       */
     float getRadius();
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Get the number of faces from object
+      * @return number of faces
       */
     int getNumFaces();
 };
@@ -331,37 +288,32 @@ public:
 //CLASS CUBE
 /*************************************************/
 /**
- * @brief Clase que implementa un cubo en 3D.
+ * @brief Class that implement a cube in 3D.
  */
 class Cube: public _object3D {
 private:
-    /** @brief  */
+    /** @brief Holds long of side in object */
     float _side;
 
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Create the geometry of object
       */
     void createObject();
 
 public:
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Constructor of class
+      * @param side of object. Default value 1.0
       */
     Cube(float side=1.0);
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Set parameters
+      * @param side of object. Default value 1.0
       */
     void Parameters(float side=1.0);
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Get side of object
+      * @return value of side
       */
     float getSide();
 };
@@ -370,53 +322,50 @@ public:
 //CLASS Cylinder
 /*************************************************/
 /**
- * @brief Clase que implementa un cilindro en 3D.
+ * @brief Class that implement a cylinder in 3D.
  */
 class Cylinder: public _object3D {
 private:
-    /** @brief  */
+    /** @brief Holds radius of object */
     float _radius;
-    /** @brief  */
+    /** @brief Holds high of object */
     float _high;
-    /** @brief  */
+    /** @brief Holds the number of faces in object */
     int _numFaces;
 
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Create the geometry of object
       */
     void createObject();
 
 public:
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Constructor of class
+      * @param radius of object. Default value 1.0
+      * @param high of object. Default value 1.0
+      * @param faces of object. Default value 20
       */
     Cylinder(float radius=1.0, float high=1.0 , int faces=20);
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Set parameters of object
+      * @param radius of object. Default value 1.0
+      * @param high of object. Default value 1.0
+      * @param faces of object. Default value 20
       */
     void Parameters(float radius=1.0, float high=1.0 , int faces=20);
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Get high of object
+      * @return value of high.
       */
     float getHigh();
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Get radius of object
+      * @return value of radius
       */
     float getRadius();
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Get the number of faces in object
+      * @return number of faces
       */
     int getNumFaces();
 };
@@ -425,38 +374,35 @@ public:
 //CLASS SPHERE
 /*************************************************/
 /**
- * @brief Clase que implementa una esfera en 3D.
+ * @brief Class that implement a sphere in 3D.
  */
 class Sphere: public _object3D {
 private:
-    /** @brief  */
+    /** @brief Holds radius of sphere */
     float _radius;
-    /** @brief  */
+    /** @brief Holds the number of faces of sphere */
     int _numFaces;
 
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Create the geometry of object
       */
     void createObject();
 public:
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Constructor
+      * @param radius of object. Default value 1.0
+      * @param faces number of faces of object. Default value 20.
       */
     Sphere(float radius=1.0, int faces=20);
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Set parameters of object
+      * @param radius of object. Default value 1.0
+      * @param faces number of faces of object. Default value 20.
       */
     void Parameters(float radius=1.0 , int faces=20 );
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief get radius of object
+      * @return value of radius.
       */
     float getRadius();
 };
@@ -465,39 +411,36 @@ public:
 //CLASS SEMISPHERE
 /*************************************************/
 /**
- * @brief Clase que implementa una semiesfera en 3D.
+ * @brief Class that implement a semisphere in 3D.
  */
 class SemiSphere: public _object3D {
 private:
-    /** @brief  */
+    /** @brief Holds radius of semisphere */
     float _radius;
-    /** @brief  */
+    /** @brief Holds the number of faces of semisphere */
     int _numFaces;
 
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Create the geometry of object
       */
     void createObject();
 
 public:
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Constructor
+      * @param radius of object. Default value 1.0
+      * @param faces number of faces of object. Default value 20.
       */
     SemiSphere(float radius=1.0, int faces=20);
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Set parameters of object
+      * @param radius of object. Default value 1.0
+      * @param faces number of faces of object. Default value 20.
       */
     void Parameters(float radius=1.0 , int faces=20 );
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief get radius of object
+      * @return value of radius.
       */
     float getRadius();
 };
@@ -506,45 +449,41 @@ public:
 //CLASS PYRAMID
 /*************************************************/
 /**
- * @brief Clase que implementa una piramide en 3D.
+ * @brief Class that implement a pyramid in 3D.
  */
 class Pyramid: public _object3D {
 private:
-    /** @brief  */
+    /** @brief Holds high of object */
     float _high;
-    /** @brief  */
+    /** @brief Holds side of object */
     float _side;
 
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Create the geometry of object
       */
     void createObject();
 
 public:
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Constructor of class
+      * @param high of object. Default value 1.0
+      * @param side of object. Default value 1.0
       */
-    Pyramid(float hight=1.0, float side=1.0) ;
+    Pyramid(float high=1.0, float side=1.0) ;
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Set parameters of object
+      * @param high of object. Default value 1.0
+      * @param side of object. Default value 1.0
       */
-    void Parameters(float hight=1.0, float side=1.0 );
+    void Parameters(float high=1.0, float side=1.0 );
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Get side of object
+      * @return value of side.
       */
     float getSide();
     /**
-      * @brief
-      * @param
-      * @return
+      * @brief Get high of object
+      * @return value of high
       */
     float getHigh();
 };

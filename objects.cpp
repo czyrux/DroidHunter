@@ -24,32 +24,13 @@ _object3D::~_object3D(){
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void _object3D::setColor(const _vertex3f &c){
-    this->_colorRGB=c;
-}
-_vertex3f _object3D::getColor(){
-    return this->_colorRGB;
-}
+void _object3D::setColor(const _vertex3f &c){ this->_colorRGB=c; }
+_vertex3f _object3D::getColor(){ return this->_colorRGB; }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void _object3D::setVertices(const vector<_vertex3f> &v ){
-    this->_vertices.clear();
-    this->_vertices=v;
-}
-vector<_vertex3f> _object3D::getVertices(){
-    return this->_vertices;
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-void _object3D::setFaces(const vector<face> &v ){
-    this->_faces.clear();
-    this->_faces=v;
-}
-vector<face> _object3D::getFaces(){
-    return this->_faces;
-}
+vector<_vertex3f> _object3D::getVertices(){ return this->_vertices; }
+vector<face> _object3D::getFaces(){ return this->_faces; }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -372,15 +353,6 @@ float _object3D::collisionRadius() {
     return aux.module();
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-float _object3D::Ymax() { return this->_Ymax;}
-float _object3D::Ymin() { return this->_Ymin;}
-float _object3D::Xmax() { return this->_Xmax;}
-float _object3D::Xmin() { return this->_Xmin;}
-float _object3D::Zmax() { return this->_Zmax;}
-float _object3D::Zmin() { return this->_Zmin;}
-
 /*************************************************/
 //CLASS OBJECT3DPLY
 /*************************************************/
@@ -430,16 +402,16 @@ void Object3DPly::createObject( ){
 //CLASS CONE
 /*************************************************/
 
-Cone::Cone(float radius , float hight , int faces){
+Cone::Cone(float radius , float high , int faces){
     this->_radius=radius;
-    this->_high=hight;
+    this->_high=high;
     this->_numFaces=faces;
     this->createObject();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-float Cone::getHight() { return this->_high;}
+float Cone::getHigh() { return this->_high;}
 int Cone::getNumFaces() { return this->_numFaces; }
 float Cone::getRadius() { return this->_radius; }
 
