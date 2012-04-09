@@ -7,7 +7,7 @@
 /*************************************************************************/
 /**
  * @file wasp.h
- * @brief Implementation of obeject wasp in 3D. Inherits from HierarchycalObject
+ * @brief Implementation of object wasp in 3D. Inherits from HierarchycalObject
  * @author Antonio Gutierrez Martinez
  *
  *
@@ -62,7 +62,7 @@ public:
     void draw( drawMode d );
     void drawRange();
     float getRange();
-    void setColor (material firstColor , material secondColor );
+    void setColor(vector<material> m);
 };
 
 #endif // WASP_H

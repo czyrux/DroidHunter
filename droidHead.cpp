@@ -27,9 +27,9 @@ DroidHead::~DroidHead() {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void DroidHead::setColor ( material faceColor , material eyeColor ) {
-    this->_eyeColor = eyeColor;
-    this->_faceColor = faceColor;
+void DroidHead::setColor ( vector<material> m ) {
+    this->_eyeColor = m.at(1);
+    this->_faceColor = m.at(0);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

@@ -34,7 +34,6 @@
  */
 struct material
 {
-
     _vertex4f _ambient;
     _vertex4f _diffuse;
     _vertex4f _specular;

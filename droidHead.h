@@ -44,7 +44,7 @@ public:
     DroidHead( float width=1.0 , float hight=1.0 );
     ~DroidHead();
     void draw( drawMode d );
-    void setColor ( material faceColor , material eyeColor );
+    void setColor(vector<material> );
 };
 
 #endif // DROIDHEAD_H

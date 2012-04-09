@@ -54,6 +54,7 @@ public:
     void draw( drawMode d );
     float getRange();
     void setColor (material colorBody , material colorEyes );
+    void setColor(vector<material> );
 };
 
 #endif // DROID_H

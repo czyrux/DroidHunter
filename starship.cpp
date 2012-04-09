@@ -84,9 +84,9 @@ void Starship::draw( drawMode d ) {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Starship::setColor( material principal , material secondary ) {
-    this->_principal = principal;
-    this->_secondary = secondary;
+void Starship::setColor( vector<material> m ) {
+    this->_principal = m.at(0);
+    this->_secondary = m.at(1);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

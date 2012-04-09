@@ -19,9 +19,12 @@ Wasp::Wasp( float width , float high , bool range){
 
     this->_second = cyanPlasticColor;
     this->_first = blackPlasticColor;
+    vector<material> material_color;
+    material_color.push_back(_first);
+    material_color.push_back(_second);
 
     this->_head = new DroidHead();
-    this->_head->setColor(blackPlasticColor,cyanPlasticColor);
+    this->_head->setColor(material_color);
     this->_body = new Cylinder();
     this->_body2 = new Cylinder();
     this->_stinger = new Cone();
@@ -36,6 +39,8 @@ Wasp::Wasp( float width , float high , bool range){
     this->_state = _NORMAL;
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 Wasp::~Wasp() {
     if (this->_head ) delete this->_head;
     if (this->_body ) delete this->_body;
@@ -49,9 +54,13 @@ Wasp::~Wasp() {
     if (this->_shot) delete this->_shot;
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 float Wasp::getRadioCollision() {
     return this->_high+_width/2;
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Wasp::draw( drawMode d  ) {
     float fly = _high*3;
@@ -186,11 +195,18 @@ void Wasp::draw( drawMode d  ) {
     glPopMatrix();
 }
 
-void Wasp::setColor (material first , material second ) {
-    this->_first = first;
-    this->_second = second;
-    this->_head->setColor(first,second);
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void Wasp::setColor (vector<material> m ) {
+    this->_first = m.at(0);
+    this->_second = m.at(1);
+    vector<material> material_color;
+    material_color.push_back(_first);
+    material_color.push_back(_second);
+    this->_head->setColor(material_color);
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Wasp::drawRange() {
     if (_range) {
@@ -203,6 +219,8 @@ void Wasp::drawRange() {
         glPopMatrix();
     }
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 float Wasp::getRange() {
     return _rangeRadius;

@@ -46,7 +46,7 @@ public:
     void draw( drawMode d );
     float getRadioCollision();
     void changeState ( );
-    void setColor (material colorBody , material colorTooth );
+    void setColor(vector<material> );
 };
 
 #endif // BALL_MONSTER_H

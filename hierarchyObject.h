@@ -42,6 +42,7 @@ protected:
     drawMode _drawMode;
     stateObject _state;
 public:
+
     _hierarchyObject() {
         this->_width = this->_high = 0;
         _drawMode = gouraud;
@@ -61,7 +62,7 @@ public:
     void setState( stateObject state ) { this->_state = state; }
     stateObject getState() { return _state;}
 
-    virtual void setColor( material , material ){ }
+    virtual void setColor(vector<material> )=0;
     virtual float getRadioCollision(){ return 0.0;}
     virtual float getRange(){return 0.0;}
     virtual void draw( drawMode d)=0;

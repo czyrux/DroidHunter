@@ -53,8 +53,7 @@ public:
     void draw( drawMode d );
     void drawRange();
     float getRange();
-    void setColor( material _principal , material _secondary );
-
+    void setColor(vector<material> );
 };
 
 #endif // STARSHIP_H

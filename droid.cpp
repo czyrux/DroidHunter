@@ -4,9 +4,9 @@
 /**********************************/
 //CLASS DROID
 /**********************************/
-Droid::Droid( float width , float hight , bool range){
+Droid::Droid( float width , float high , bool range){
     this->_width=width;
-    this->_high=hight;
+    this->_high=high;
     this->_range = range;
 
     if ( range ) {
@@ -192,14 +192,17 @@ void Droid::draw( drawMode d ) {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Droid::setColor (material colorBody , material colorEyes ) {
-    this->_color = colorBody;
-    this->_hand->setColor(colorBody);
-    this->_head->setColor(colorBody,colorEyes);
+float Droid::getRange() {
+    return _rangeRadius;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-float Droid::getRange() {
-    return _rangeRadius;
+void Droid::setColor(vector<material> m ) {
+    this->_color = m.at(0);
+    vector<material> material_color;
+    material_color.push_back(m.at(0));
+    material_color.push_back(m.at(1));
+    this->_hand->setColor(material_color);
+    this->_head->setColor(material_color);
 }

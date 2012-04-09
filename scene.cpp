@@ -17,14 +17,19 @@ Scene::Scene(){
 
     pos.x=-100;pos.z=-100;pos.y=0;
     this->_primary = new Droid();
-    this->_primary->setColor(rojizoColor,blackColor);
+    vector<material> material_color;
+    material_color.push_back(rojizoColor); //color body
+    material_color.push_back(blackColor); //color eyes
+    this->_primary->setColor(material_color);
     this->_secondary = new BallMonster();
     this->personaje = new Character (_primary,_secondary,this->numeroTicks,pos,scaleW);
     this->_personajeDied = NULL;
     this->_wasp = new Wasp();
     this->_wasp->setState(_MOVING);
     this->_minDroid = new Droid(.5,2.,false);
-    this->_minDroid->setColor(pearlColor,rubyColor);
+    material_color[0] = pearlColor;
+    material_color[1] = rubyColor;
+    this->_minDroid->setColor(material_color);
     this->_minDroid->setState(_MOVING);
 
 
@@ -41,13 +46,15 @@ Scene::Scene(){
     Particle aux(_minDroid,this->numeroTicks,pos,scaleD,"droid",this->personaje);
     _droids.push_back(aux);
 
-    for ( int i=0 ; i<10 ; i++ ) {
+    //put watchers
+    for ( int i=0 ; i<3 ; i++ ) {
         pos.x=r.value();
         pos.z=r.value();
         aux.parameters(_wasp,this->numeroTicks,pos,scaleW,"wasp",personaje);
         _wasps.push_back(aux);
     }
 
+    //put mini droids
     for ( int i=0 ; i<8 ; i++ ) {
         pos.x=r.value();
         pos.z=r.value();

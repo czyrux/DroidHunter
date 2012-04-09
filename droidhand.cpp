@@ -24,8 +24,8 @@ DroidHand::~DroidHand() {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void DroidHand::setColor ( material color ) {
-    this->_color = color;
+void DroidHand::setColor ( vector<material> m ) {
+    this->_color = m.at(0);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

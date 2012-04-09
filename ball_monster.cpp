@@ -75,9 +75,9 @@ float BallMonster::getRadioCollision() {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void BallMonster::setColor (material colorBody , material colorTooth ) {
-    this->_faceColor = colorBody;
-    this->_toothColor = colorTooth;
+void BallMonster::setColor (vector<material> m ) {
+    this->_faceColor = m.at(0);
+    this->_toothColor = m.at(1);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
