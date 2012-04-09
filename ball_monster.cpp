@@ -1,6 +1,6 @@
 #include "ball_monster.h"
 
-Ball::Ball( float width ) {
+BallMonster::BallMonster( float width ) {
     this->_width = width;
 
     this->_faceColor = copperColor;//orangeColor;
@@ -10,15 +10,19 @@ Ball::Ball( float width ) {
     this->_body = new Sphere (1.0,20);//&sphere;
     this->_tooth = new SemiSphere (1.0,20);//&semisphere;
 
-    _state = _open;
+    _state = _OPEN;
 }
 
-Ball::~Ball() {
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+BallMonster::~BallMonster() {
     if (this->_body ) delete this->_body;
     if (this->_tooth ) delete this->_tooth;
 }
 
-void Ball::draw( drawMode d ) {
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void BallMonster::draw( drawMode d ) {
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glTranslatef(0,_width+_width/4,0);
@@ -35,7 +39,7 @@ void Ball::draw( drawMode d ) {
     glPushMatrix();
     glRotatef(180,0,0,1);
     glTranslatef(0,0,_width/5+_width/8);
-    (_state == _open )?glScalef(_width*4/5,_width*4/5,_width*4/5)
+    (_state == _OPEN )?glScalef(_width*4/5,_width*4/5,_width*4/5)
                      :glScalef(_width*4/5,_width/5,_width*4/5);
      //abierta
      //cerrada
@@ -63,15 +67,21 @@ void Ball::draw( drawMode d ) {
     glPopMatrix();
 }
 
-float Ball::getRadioCollision() {
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+float BallMonster::getRadioCollision() {
     return this->_width;
 }
 
-void Ball::setColor (material colorBody , material colorTooth ) {
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void BallMonster::setColor (material colorBody , material colorTooth ) {
     this->_faceColor = colorBody;
     this->_toothColor = colorTooth;
 }
 
-void Ball::changeState ( ) {
-    (_state==_open)?_state=_close:_state=_open;
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void BallMonster::changeState ( ) {
+    (_state==_OPEN)?_state=_CLOSE:_state=_OPEN;
 }

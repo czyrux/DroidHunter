@@ -1,7 +1,5 @@
 #include "wasp.h"
 
-#include <iostream>
-
 /**********************************/
 //CLASS WASP
 /**********************************/
@@ -22,7 +20,8 @@ Wasp::Wasp( float width , float high , bool range){
     this->_second = cyanPlasticColor;
     this->_first = blackPlasticColor;
 
-    this->_head = new WaspHead();
+    this->_head = new DroidHead();
+    this->_head->setColor(blackPlasticColor,cyanPlasticColor);
     this->_body = new Cylinder();
     this->_body2 = new Cylinder();
     this->_stinger = new Cone();
@@ -34,7 +33,7 @@ Wasp::Wasp( float width , float high , bool range){
     this->_shadow->setMaterial(blackPlasticColor);
     this->_shot->setMaterial(rubyColor);
 
-    this->_state = _normal;
+    this->_state = _NORMAL;
 }
 
 Wasp::~Wasp() {
@@ -59,10 +58,10 @@ void Wasp::draw( drawMode d  ) {
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    if (_state==_flying || _state==_moving || _state==_shooting){ glTranslatef(0,fly,0);}
+    if (_state==_FLYING || _state==_MOVING || _state==_SHOOTING){ glTranslatef(0,fly,0);}
     //if (_state==_nailed)glTranslatef(0,-_high/2,0);
     //if (_state==_small)glScalef(1,0.25,1);
-    if (_state==_moving) glRotatef(10,1,0,0);
+    if (_state==_MOVING) glRotatef(10,1,0,0);
     glPushMatrix();
     glTranslatef(0,_high,0);
         //pintamos cabeza
@@ -174,7 +173,7 @@ void Wasp::draw( drawMode d  ) {
         glPopMatrix();
 
         //disparo
-        if (_state == _shooting ) {
+        if (_state == _SHOOTING ) {
             glPushMatrix();
             //glTranslatef(_width-_high*2/3+_width/2,_high/3,-_width/2);
             glScalef(_width/4,fly,_width/4);
@@ -207,72 +206,4 @@ void Wasp::drawRange() {
 
 float Wasp::getRange() {
     return _rangeRadius;
-}
-
-/**********************************/
-//CLASS WASPHEAD
-/**********************************/
-WaspHead::WaspHead( float width , float high ) {
-    this->_width = width;
-    this->_high = high;
-
-    //definimos colores
-    this->_eyeColor = cyanPlasticColor;
-    this->_faceColor = blackPlasticColor;
-
-    //asignamos partes
-    this->_face = new SemiSphere();
-    this->_eye = new Sphere();
-    this->_antenna =new Cylinder();
-}
-
-WaspHead::~WaspHead() {
-    if (this->_eye ) delete _eye;
-    if (this->_face ) delete _face;
-    if (this->_antenna ) delete _antenna;
-}
-
-void WaspHead::draw( drawMode d ) {
-
-    //pintamos cara
-    this->_face->setMaterial(this->_faceColor);
-    glPushMatrix();
-    glScalef(_width,_high,_width);
-    _face->draw(d);
-    glPopMatrix();
-
-    //pintamos ojos
-    this->_eye->setMaterial(this->_eyeColor);
-    glPushMatrix();
-    glTranslatef(_width/3,_high/3*2,_width/2);
-    glScalef(_width/10,_high/3,_width/10);
-    _eye->draw(d);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(-_width/3,_high/3*2,_width/2);
-    glScalef(_width/10,_high/3,_width/10);
-    _eye->draw(d);
-    glPopMatrix();
-
-    //pintamos antenas
-    this->_antenna->setMaterial(this->_faceColor);
-    glPushMatrix();
-    glRotatef(30,0,0,1);
-    glTranslatef(-_width/4,_high+_high/4,-_width/3);
-    glScalef(_width/15,_high,_width/15);
-    _antenna->draw(d);
-    glPopMatrix();
-
-    glPushMatrix();
-    glRotatef(-30,0,0,1);
-    glTranslatef(_width/4,_high+_high/4,-_width/3);
-    glScalef(_width/15,_high,_width/15);
-    _antenna->draw(d);
-    glPopMatrix();
-}
-
-void WaspHead::setColor ( material faceColor , material eyeColor ) {
-    this->_faceColor = faceColor;
-    this->_eyeColor = eyeColor;
 }

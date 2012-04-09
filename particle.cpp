@@ -67,11 +67,11 @@ void Particle::moveParticle() {
     }else {
         _posBegin=_posNow;
         //Si no estamos asustados, buscamos otro objetivo, sino permanecemos quietos
-        if (_stateObject == _screaming ) {
+        if (_stateObject == _SCREAMING ) {
             _state=screamed;
         }else if ( _pursuitCharacter ) { //si llegamos al objetivo que buscabamos, vemos si atacamos
             _state=attacking;
-            _stateObject = _shooting;
+            _stateObject = _SHOOTING;
         }else {
             //q_state=(rand () % 3 == 1 )? search_Goal:working;
             _state=search_Goal;
@@ -138,7 +138,7 @@ void Particle::spinningParticle(){
         _spinNow = normalize(_spinNow);
         _tick=0;
         _state=walking;
-        if ( _stateObject!=_screaming )_stateObject = _moving;
+        if ( _stateObject!=_SCREAMING )_stateObject = _MOVING;
     }
 }
 
@@ -159,7 +159,7 @@ void Particle::scream() {
         _tick=0;
         tickAccion=0;
         _state=search_Goal;
-        _stateObject=_normal;
+        _stateObject=_NORMAL;
     }
 
 }
@@ -169,21 +169,21 @@ void Particle::scream() {
 void Particle::attack() {
     //si le doy
     if (personaje->collision(_posNow,this->_object->getWidth())) {
-            this->personaje->setState(_dead);
+            this->personaje->setState(_DEAD);
         //buscamos otro objetivo
             _pursuitCharacter = false;
             _state = search_Goal;
             _posBegin=_posNow;
             tickAccion = 0;
             _tick = 0;
-            if ( _stateObject!=_screaming )_stateObject = _moving;
+            if ( _stateObject!=_SCREAMING )_stateObject = _MOVING;
     }else {
             _pursuitCharacter = false;
             _state = search_Goal;
             _posBegin=_posNow;
             tickAccion = 0;
             _tick = 0;
-            if ( _stateObject!=_screaming )_stateObject = _moving;
+            if ( _stateObject!=_SCREAMING )_stateObject = _MOVING;
     }
 }
 
@@ -194,7 +194,7 @@ void Particle::work() {
     //_tick++;
 
     if ( (tickAccion % (TICK_TOP/50+1)) == 0 ) {
-        _stateObject=(_stateObject == _takeHammer )?_hitHammer:_takeHammer;
+        _stateObject=(_stateObject == _TAKE_HAMMER )?_HIT_HAMMER:_TAKE_HAMMER;
         tickAccion = 0;
     }
 
@@ -217,8 +217,8 @@ void Particle::animate() {
     case calculate_Spin:
         calculateSpin();
         _state=spinning;
-        if (_stateObject!=_screaming )
-            (_type=="wasp")?_stateObject = _flying:_stateObject=_normal;
+        if (_stateObject!=_SCREAMING )
+            (_type=="wasp")?_stateObject = _FLYING:_stateObject=_NORMAL;
         break;
     case spinning:
         spinningParticle();

@@ -25,8 +25,10 @@ Droid::Droid( float width , float hight , bool range){
 
     this->_color = emeraldColor;
 
-    this->_state = _normal;
+    this->_state = _NORMAL;
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 Droid::~Droid() {
     if (this->_head ) delete this->_head;
@@ -36,15 +38,19 @@ Droid::~Droid() {
     if (this->_radius) delete this->_radius;
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 float Droid::getRadioCollision() {
     return this->_width+_width;
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 void Droid::draw( drawMode d ) {
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    if(_state==_screaming || _state==_moving)glRotatef(10,1,0,0);
-    if ( _state == _dead ) {
+    if(_state==_SCREAMING || _state==_MOVING)glRotatef(10,1,0,0);
+    if ( _state == _DEAD ) {
         glRotatef(-90,1,0,0);
     }else
         glTranslatef(0,_high,0);
@@ -53,7 +59,7 @@ void Droid::draw( drawMode d ) {
         glPushMatrix();
         glTranslatef(0,(_high/2)+(_high/6),0);
         glScalef(_width,_high/3,_width);
-        if (_state==_screaming) glRotatef(-15,1,0,0);
+        if (_state==_SCREAMING) glRotatef(-15,1,0,0);
         _head->draw(d);
         glPopMatrix();
 
@@ -65,7 +71,7 @@ void Droid::draw( drawMode d ) {
         glPopMatrix();
 
         //pintamos brazos
-        if ( _state == _takeHammer ) {
+        if ( _state == _TAKE_HAMMER ) {
             glPushMatrix();
             glRotatef(0,1,0,0);
             glPushMatrix();
@@ -90,7 +96,7 @@ void Droid::draw( drawMode d ) {
             this->_hand->draw(d);
             glPopMatrix();
 
-        } else if (_state==_hitHammer){
+        } else if (_state==_HIT_HAMMER){
             glPushMatrix();
             glRotatef(60,1,0,0);
             glPushMatrix();
@@ -115,7 +121,7 @@ void Droid::draw( drawMode d ) {
             this->_hand->draw(d);
             glPopMatrix();
 
-        } else if (_state==_screaming) {
+        } else if (_state==_SCREAMING) {
             glPushMatrix(); //drcha
             glRotatef(20,0,0,1);
             glRotatef(20,1,0,0);
@@ -181,8 +187,10 @@ void Droid::draw( drawMode d ) {
     glPopMatrix();
 
     //pintamos rango accion
-    if (_range && _state!=_dead)this->_radius->draw();
+    if (_range && _state!=_DEAD)this->_radius->draw();
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Droid::setColor (material colorBody , material colorEyes ) {
     this->_color = colorBody;
@@ -190,120 +198,8 @@ void Droid::setColor (material colorBody , material colorEyes ) {
     this->_head->setColor(colorBody,colorEyes);
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 float Droid::getRange() {
     return _rangeRadius;
-}
-
-/**********************************/
-//CLASS DROIDHEAD
-/**********************************/
-DroidHead::DroidHead( float width , float high ) {
-    this->_width = width;
-    this->_high = high;
-
-    //definimos colores
-    this->_eyeColor = blackPlasticColor;
-    this->_faceColor = emeraldColor;
-
-    //asignamos partes
-    this->_face = new SemiSphere (1.0,20);
-    this->_antenna = new Cylinder(1.0,1.0,20);
-    this->_eye = new Sphere (1.0,20);
-}
-
-DroidHead::~DroidHead() {
-    if (this->_antenna ) delete this->_antenna;
-    if (this->_eye ) delete this->_eye;
-    if (this->_face ) delete this->_face;
-}
-
-void DroidHead::setColor ( material faceColor , material eyeColor ) {
-    this->_eyeColor = eyeColor;
-    this->_faceColor = faceColor;
-}
-
-void DroidHead::draw( drawMode d ) {
-
-    //pintamos cara
-    this->_face->setMaterial(this->_faceColor);
-    glPushMatrix();
-    glScalef(_width,_high,_width);
-    _face->draw(d);
-    glPopMatrix();
-
-    //pintamos ojos
-    this->_eye->setMaterial(this->_eyeColor);
-    glPushMatrix();
-    glTranslatef(_width/3,_high/3*2,_width/2);
-    glScalef(_width/10,_high/3,_width/10);
-    _eye->draw(d);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(-_width/3,_high/3*2,_width/2);
-    glScalef(_width/10,_high/3,_width/10);
-    _eye->draw(d);
-    glPopMatrix();
-
-    //pintamos antenas
-    this->_antenna->setMaterial(this->_faceColor);
-    glPushMatrix();
-    glRotatef(30,0,0,1);
-    glTranslatef(-_width/4,_high+_high/4,-_width/3);
-    glScalef(_width/15,_high,_width/15);
-    _antenna->draw(d);
-    glPopMatrix();
-
-    glPushMatrix();
-    glRotatef(-30,0,0,1);
-    glTranslatef(_width/4,_high+_high/4,-_width/3);
-    glScalef(_width/15,_high,_width/15);
-    _antenna->draw(d);
-    glPopMatrix();
-}
-
-/**********************************/
-//CLASS DROIDHAND
-/**********************************/
-DroidHand::DroidHand( float width , float hight ) {
-    this->_width = width;
-    this->_high = hight;
-
-    //definimos colores
-    this->_color = emeraldColor;
-
-    //asignamos partes
-    this->_hand = new Cylinder(1.0,1.0,20);
-    this->_ball = new Sphere (1.0,20);
-}
-
-DroidHand::~DroidHand() {
-    if (this->_ball ) delete this->_ball;
-    if (this->_hand ) delete this->_hand;
-}
-
-void DroidHand::setColor ( material color ) {
-    this->_color  = color;
-}
-
-void DroidHand::draw( drawMode d ) {
-
-    //pintamos el brazo
-    this->_hand->setMaterial(this->_color);
-    glPushMatrix();
-    glScalef(_width,_high,_width);
-    _hand->draw(d);
-    glPopMatrix();
-
-    //pintamos terminaciones
-    this->_ball->setMaterial(this->_color);
-    glPushMatrix();
-    glTranslatef(0,-_high/2,0);
-    glScalef(_width,_width,_width);
-    _ball->draw(d);
-    glPopMatrix();
-}
-
-float DroidHand::getHight() {
-    return _high+_width;
 }

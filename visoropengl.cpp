@@ -236,14 +236,14 @@ void VisorOpenGL::keyPressEvent(QKeyEvent *event){
 
     //Acciones del personaje
     case Qt::Key_Z:
-        (_scene.getCharacterState()==_normal)?_scene.setCharacterState(_takeHammer):_scene.setCharacterState(_normal);
+        (_scene.getCharacterState()==_NORMAL)?_scene.setCharacterState(_TAKE_HAMMER):_scene.setCharacterState(_NORMAL);
         break;
     case Qt::Key_X:
-        if (_scene.getCharacterState()==_takeHammer) { _scene.setCharacterState(_hitHammer);
-        }else _scene.setCharacterState(_normal);
+        if (_scene.getCharacterState()==_TAKE_HAMMER) { _scene.setCharacterState(_HIT_HAMMER);
+        }else _scene.setCharacterState(_NORMAL);
         break;
     case Qt::Key_C:
-        _scene.setCharacterState(_screaming);
+        _scene.setCharacterState(_SCREAMING);
         break;
 
     //Cambio de velocidad de la escena
@@ -298,7 +298,7 @@ void VisorOpenGL::keyPressEvent(QKeyEvent *event){
          }*/
         cameras[camera_actual].rotateX(-5);
         break;
-
+    /*
     case Qt::Key_V:
         camera_actual = 4;
              cout << "Introduzca el VRP:" << endl;
@@ -316,6 +316,7 @@ void VisorOpenGL::keyPressEvent(QKeyEvent *event){
              cameras[4].set(VRP,VPN,VUP);
              cout << "Camara activa" << endl;
             break;
+    */
     // Primitivas Gráficas
     case Qt::Key_Q: QCoreApplication::exit(0);
     default: QGLWidget::keyPressEvent(event);break;

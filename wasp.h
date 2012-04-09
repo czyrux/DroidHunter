@@ -33,27 +33,14 @@
 #include "vertex.h"
 #include "circle.h"
 #include "hierarchyObject.h"
+#include "droidHead.h"
 
 
 //CLASS WASP
-class WaspHead {
-private:
-    Sphere *_eye;
-    SemiSphere *_face;
-    Cylinder *_antenna;
-    material _eyeColor , _faceColor;
-    float _width;
-    float _high;
-public:
-    WaspHead( float width=1.0 , float high=1.0 );
-    ~WaspHead();
-    void draw( drawMode d  );
-    void setColor ( material faceColor , material eyeColor );
-};
 
 class Wasp : public _hierarchyObject{
 private:
-    WaspHead *_head;
+    DroidHead *_head;
     Cylinder *_body;
     Cylinder *_body2;
     Cone *_stinger;

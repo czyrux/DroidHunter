@@ -33,28 +33,28 @@ void Character::initialize(_hierarchyObject *objeto,_hierarchyObject *objeto2,in
     this->_collisionRadius=this->_my->getRadioCollision();
     this->_scaleFactor=factorEscala;
     this->_elevation=0;
-    this->_state = _normal;
+    this->_state = _NORMAL;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Character::animate() {
-    if ( _state != _dead ) {
+    if ( _state != _DEAD ) {
     this->_tickAction++;
 
     if ( _tickAction >= _tickTotal/4 ) {
         _tickAction = 0;
         switch (_state) {
-        case _screaming:
-            _state = _normal;
+        case _SCREAMING:
+            _state = _NORMAL;
             break;
-        case _hitHammer:
-            _state = _takeHammer;
+        case _HIT_HAMMER:
+            _state = _TAKE_HAMMER;
             break;
         default:
             break;
         }
-        ((Ball*)this->_secondary)->changeState();
+        ((BallMonster*)this->_secondary)->changeState();
     }
     }
 
@@ -84,7 +84,7 @@ void Character::draw( drawMode d) {
     _my->draw(d);
     glPopMatrix();
 
-    if (_secondary!= NULL && _state != _dead ) {
+    if (_secondary!= NULL && _state != _DEAD ) {
         glPushMatrix();
         glTranslatef(_my->getHigh()*_scaleFactor/2,_my->getHigh()*_scaleFactor*2,-_my->getHigh()*_scaleFactor/2);
         glTranslatef(_posNow.x,_posNow.y-_elevation,_posNow.z);
@@ -130,7 +130,7 @@ void Character::avoidCollision(){
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Character::spinRight() {
-    if ( this->_state != _dead ) {
+    if ( this->_state != _DEAD ) {
         _spin-=20;
         _spin=normalize(_spin);
     }
@@ -139,7 +139,7 @@ void Character::spinRight() {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Character::spinLeft() {
-    if ( this->_state != _dead ) {
+    if ( this->_state != _DEAD ) {
         _spin+=20;
         _spin=normalize(_spin);
     }
@@ -148,7 +148,7 @@ void Character::spinLeft() {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Character::forward() {
-    if ( this->_state != _dead ) {
+    if ( this->_state != _DEAD ) {
         int D=10;
         //guardamos la posicion anterior
         _posOld=_posNow;
@@ -161,7 +161,7 @@ void Character::forward() {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Character::backward() {
-    if ( this->_state != _dead ) {
+    if ( this->_state != _DEAD ) {
         int D=10;
         //guardamos la posicion anterior
         _posOld=_posNow;

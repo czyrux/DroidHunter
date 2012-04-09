@@ -32,9 +32,8 @@
 
 #include "objects.h"
 
-enum stateObject { _moving , _screaming , _normal , _takeHammer , _hitHammer,
-                   /*_small ,*/ _flying , /*_nailed,*/ _open , _close , /*_inmovil ,*/
-                 _dead, _shooting };
+enum stateObject { _MOVING , _SCREAMING , _NORMAL , _TAKE_HAMMER , _HIT_HAMMER,
+                   _INANIMATE, _FLYING , _OPEN , _CLOSE , _DEAD, _SHOOTING };
 
 class _hierarchyObject {
 protected:
@@ -44,8 +43,9 @@ protected:
     stateObject _state;
 public:
     _hierarchyObject() {
-    this->_width = this->_high = 0;
-    _drawMode = gouraud;
+        this->_width = this->_high = 0;
+        _drawMode = gouraud;
+        this->_state = _INANIMATE;
     }
 
     ~_hierarchyObject(){}
@@ -55,16 +55,16 @@ public:
         this->_high = high;
     }
 
-    virtual float getRadioCollision(){ return 0.0;}
-    virtual float getRange(){return 0.0;}
     void setDrawMode ( drawMode d ) { this->_drawMode = d; }
-    virtual void setColor( material , material ){ }
     float getWidth() { return _width;}
     float getHigh() { return _high; }
     void setState( stateObject state ) { this->_state = state; }
     stateObject getState() { return _state;}
 
-    virtual void draw( drawMode d){}
+    virtual void setColor( material , material ){ }
+    virtual float getRadioCollision(){ return 0.0;}
+    virtual float getRange(){return 0.0;}
+    virtual void draw( drawMode d)=0;
 
 };
 

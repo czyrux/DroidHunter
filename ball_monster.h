@@ -35,14 +35,14 @@
 
 //CLASS Ball
 
-class Ball: public _hierarchyObject {
+class BallMonster: public _hierarchyObject {
 private:
     Sphere *_body;
     SemiSphere *_tooth;
     material _eyeColor , _faceColor , _toothColor;
 public:
-    Ball( float width=1.0 );
-    ~Ball();
+    BallMonster( float width=1.0 );
+    ~BallMonster();
     void draw( drawMode d );
     float getRadioCollision();
     void changeState ( );

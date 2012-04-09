@@ -6,8 +6,8 @@
 /*                                                                       */
 /*************************************************************************/
 /**
- * @file droid.h
- * @brief Implementation of object droid in 3D. Inherits from HierarchycalObject
+ * @file droidHead.h
+ * @brief Implementation of object headDroid in 3D. Inherits from HierarchycalObject
  * @author Antonio Gutierrez Martinez
  *
  *
@@ -26,34 +26,25 @@
  *
  */
 
-#ifndef DROID_H
-#define DROID_H
+#ifndef DROIDHEAD_H
+#define DROIDHEAD_H
 
 #include "objects.h"
 #include "vertex.h"
-#include "circle.h"
 #include "hierarchyObject.h"
-#include "droidHead.h"
-#include "droidhand.h"
 
-//CLASS DROID
-class Droid: public _hierarchyObject {
+//CLASS DROIDHEAD
+class DroidHead : public _hierarchyObject {
 private:
-    DroidHead *_head;
-    Cylinder *_body;
-    DroidHand *_hand;
-    material _color;
-    Cylinder *_hammer;
-    Circle *_radius;
-    bool _range;
-    float _rangeRadius;
+    Cylinder *_antenna;
+    Sphere *_eye;
+    SemiSphere *_face;
+    material _eyeColor , _faceColor;
 public:
-    Droid( float width=.5, float high=2.0 , bool range=true );
-    ~Droid();
-    float getRadioCollision();
+    DroidHead( float width=1.0 , float hight=1.0 );
+    ~DroidHead();
     void draw( drawMode d );
-    float getRange();
-    void setColor (material colorBody , material colorEyes );
+    void setColor ( material faceColor , material eyeColor );
 };
 
-#endif // DROID_H
+#endif // DROIDHEAD_H

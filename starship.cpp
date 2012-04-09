@@ -25,12 +25,16 @@ Starship::Starship(float width , float high , bool range)
     this->_lights->setMaterial(yellowPlasticColor);
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 Starship::~Starship() {
     if (_hood) delete _hood;
     if (_body) delete _body;
     if (_legs) delete _legs;
     if (_lights) delete _lights;
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Starship::draw( drawMode d ) {
     this->_body->setMaterial(_principal);
@@ -78,16 +82,22 @@ void Starship::draw( drawMode d ) {
     glPopMatrix();
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 void Starship::setColor( material principal , material secondary ) {
     this->_principal = principal;
     this->_secondary = secondary;
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Starship::drawRange() {
     if (_range) {
         _radius->draw();
     }
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 float Starship::getRange() {
     return _rangeRadius;

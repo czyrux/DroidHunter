@@ -18,14 +18,14 @@ Scene::Scene(){
     pos.x=-100;pos.z=-100;pos.y=0;
     this->_primary = new Droid();
     this->_primary->setColor(rojizoColor,blackColor);
-    this->_secondary = new Ball();
+    this->_secondary = new BallMonster();
     this->personaje = new Character (_primary,_secondary,this->numeroTicks,pos,scaleW);
     this->_personajeDied = NULL;
     this->_wasp = new Wasp();
-    this->_wasp->setState(_moving);
+    this->_wasp->setState(_MOVING);
     this->_minDroid = new Droid(.5,2.,false);
     this->_minDroid->setColor(pearlColor,rubyColor);
-    this->_minDroid->setState(_moving);
+    this->_minDroid->setState(_MOVING);
 
 
     this->_starship = new Starship(60.0,60.0);
@@ -41,7 +41,7 @@ Scene::Scene(){
     Particle aux(_minDroid,this->numeroTicks,pos,scaleD,"droid",this->personaje);
     _droids.push_back(aux);
 
-    for ( int i=0 ; i<2 ; i++ ) {
+    for ( int i=0 ; i<10 ; i++ ) {
         pos.x=r.value();
         pos.z=r.value();
         aux.parameters(_wasp,this->numeroTicks,pos,scaleW,"wasp",personaje);
@@ -159,37 +159,37 @@ void Scene::draw(){
          switch (_galleryElement){
          case 0:
             old = this->_primary->getState();
-            this->_primary->setState(_normal);
+            this->_primary->setState(_NORMAL);
             _primary->draw(_drawMode);
             this->_primary->setState(old);
             break;
          case 1:
             old = this->_primary->getState();
-            this->_primary->setState(_takeHammer);
+            this->_primary->setState(_TAKE_HAMMER);
             _primary->draw(_drawMode);
             this->_primary->setState(old);
             break;
          case 2:
             old = this->_primary->getState();
-            this->_primary->setState(_hitHammer);
+            this->_primary->setState(_HIT_HAMMER);
             _primary->draw(_drawMode);
             this->_primary->setState(old);
             break;
          case 3:
             old = this->_primary->getState();
-            this->_primary->setState(_screaming);
+            this->_primary->setState(_SCREAMING);
             _primary->draw(_drawMode);
             this->_primary->setState(old);
             break;
          case 4:
             old = this->_primary->getState();
-            this->_primary->setState(_dead);
+            this->_primary->setState(_DEAD);
             _primary->draw(_drawMode);
             this->_primary->setState(old);
             break;
          case 5:
              old = this->_wasp->getState();
-             this->_wasp->setState(_normal);
+             this->_wasp->setState(_NORMAL);
              this->_wasp->draw(_drawMode);
              this->_wasp->setState(old);
              break;
@@ -200,7 +200,7 @@ void Scene::draw(){
              glPopMatrix();
              break;
          case 7:
-             this->_secondary->setState(_open);
+             this->_secondary->setState(_OPEN);
              this->_secondary->draw(_drawMode);
              break;
          case 8:
@@ -227,7 +227,7 @@ void Scene::draw(){
 
 void Scene::animate() {
     if (this->_scene==1) {
-        if (this->personaje->getState()==_dead) newCharacter();
+        if (this->personaje->getState()==_DEAD) newCharacter();
 
         this->personaje->animate();
 
@@ -349,9 +349,9 @@ stateObject Scene::getCharacterState() {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Scene::setCharacterState( stateObject d) {
-    if ( personaje->getState() != _dead) {//si no esta muerto
+    if ( personaje->getState() != _DEAD) {//si no esta muerto
         personaje->setState(d);
-        if ( d==_hitHammer ) this->scream();
+        if ( d==_HIT_HAMMER ) this->scream();
     }
 }
 
@@ -374,7 +374,7 @@ void Scene::scream() {
             int D = 40;
             pos.x+=D*sin(angle*PI/180.);
             pos.z+=D*cos(angle*PI/180.);
-            _droids[i].setState(_screaming);
+            _droids[i].setState(_SCREAMING);
             _droids[i].setGoal(pos);
         }
     }
@@ -386,7 +386,7 @@ void Scene::restrictedArea() {
     bool colision;
     //Comprobamos si el droid esta en nuestro campo de accion
     for ( int i=0 ; i<_wasps.size() ; i++ ) {
-        if ( !_wasps[i].pursuitCharacter() && personaje->getState()!=_dead) {
+        if ( !_wasps[i].pursuitCharacter() && personaje->getState()!=_DEAD) {
         colision = personaje->collision(_wasps[i].getPosition(),_wasps[i].getRangeAction());
         if ( colision ) {
             _wasps[i].pursuitOn();
@@ -407,12 +407,12 @@ void Scene::newCharacter() {
         float scaleW = 3 ;
 
         _personajeDied = new Character(_primary,_secondary,this->numeroTicks,pos,scaleW);
-        _personajeDied->setState(_dead);
+        _personajeDied->setState(_DEAD);
 
         //Regeneramos el personaje
         pos.x=-100;pos.z=-100;pos.y=0;
         personaje->setPosition(pos);
-        personaje->setState(_normal);
+        personaje->setState(_NORMAL);
         _tick = 0;
     }
 }

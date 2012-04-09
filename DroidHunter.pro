@@ -32,7 +32,9 @@ SOURCES += main.cpp\
     tree3D.cpp \
     egg.cpp \
     plants.cpp \
-    window.cpp
+    window.cpp \
+    droidHead.cpp \
+    droidhand.cpp
 
 HEADERS  += mainwindow.h \
     wasp.h \
@@ -58,7 +60,9 @@ HEADERS  += mainwindow.h \
     tree3D.h \
     egg.h \
     plants.h \
-    window.h
+    window.h \
+    droidHead.h \
+    droidhand.h
 
 FORMS    += mainwindow.ui
 
