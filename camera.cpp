@@ -1,46 +1,63 @@
 #include "camera.h"
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 Camera::Camera() {
-    this->_vrp.x=0;this->_vrp.y=0;this->_vrp.z=0;
-    this->_vpn.x=0;this->_vpn.y=1;this->_vpn.z=1;
-    this->_vup.x=0;this->_vup.y=1;this->_vup.z=0;
+    //View Reference Point by default
+    this->_vrp.x = this->_vrp.y = this->_vrp.z = 0.0;
 
-    this->_gamma = 0;
-    this->_beta = 0;
-    this->_alpha = 0;
+    //View Plane Normal by default
+    //ORIGINAL this->_vpn.x=0;this->_vpn.y=1;this->_vpn.z=1;
+    this->_vpn.x=0.0;this->_vpn.y=0.0;this->_vpn.z=1.0;
+    this->_vpn.normalize();
+
+    //View Up by default
+    this->_vup.x=0.0;this->_vup.y=1.0;this->_vup.z=0.0;
+    this->_vup.normalize();
+
+    //Angles by default
+    this->_gamma = 0.0;
+    this->_beta = 0.0;
+    this->_alpha = 0.0;
 
     this->initialize(this->_vrp,this->_vpn,this->_vup);
 }
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 Camera::Camera(_vertex3f vrp,_vertex3f vpn,_vertex3f vup) {
     initialize(vrp,vpn,vup);
 }
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Camera::viewingTransformation()
 {
-    _matrix4f mat;
+    _matrix4f Mx, My;
     _vertex3f np,up,upp;
 
-    //primero calculamos la rotacion de alfa respecto al eje X
-    _alpha=atan2(_n.y,_n.z)*180/M_PI;
-    np=_n*mat.rotate_axis_x(_alpha);
-    up=_u*mat.rotate_axis_x(_alpha);
+    //Calculating alpha rotating about the X axis
+    this->_alpha = (atan2(this->_n.y,this->_n.z) / M_PI) * 180.0;
+    this->_alpha = normalizeAngle(this->_alpha);
+    Mx.rotate_axis_x(this->_alpha);
+    np = this->_n * Mx;
+    np.normalize();
+    up = this->_u * Mx;
+    up.normalize();
 
-    //calculamos la rotacion beta respecto del eje Y
-    _beta=atan2(_n.x,np.z)*180/M_PI;
-    upp=up*mat.rotate_axis_y(-_beta);
+    //Calculating beta rotating about the Y axis
+    this->_beta = (atan2(np.x,np.z)/M_PI) * 180.0;
+    this->_beta = normalizeAngle(this->_beta);
+    My.rotate_axis_y(-this->_beta);
+    upp = up * My;
+    upp.normalize();
 
-    //calculamos la rotacion gamma respecto del eje z
-    _gamma=atan2(upp.y,upp.x)*180/M_PI;
+    //Calculating gamma rotating about the Z axis
+    this->_gamma = (atan2(upp.y,upp.x)/M_PI * 180.0);
+    this->_gamma = normalizeAngle(this->_gamma);
 }
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Camera::initialize(_vertex3f vrp,_vertex3f vpn,_vertex3f vup) {
 
@@ -51,21 +68,16 @@ void Camera::initialize(_vertex3f vrp,_vertex3f vpn,_vertex3f vup) {
     this->_vpn=vpn.normalize();
     this->_vup=vup.normalize();
 
-    //calculamos n , u y v
-    _n=_vrp-_vpn;
-    _u=_vup.cross_product(_n);
-    _v=_n.cross_product(_u);
-
-    //normalizamos
-    _n.normalize();
-    _u.normalize();
-    _v.normalize();
+    //calculing n , u y v
+    this->_n = /*this->_vrp -*/ this->_vpn.normalize();
+    this->_u = this->_vup.cross_product(this->_n).normalize();
+    this->_v = this->_n.cross_product(this->_u).normalize();
 
     //calculamos la transformacion de vista
     this->viewingTransformation();
 }
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Camera::lookat( bool opengl )
 {
@@ -82,27 +94,19 @@ void Camera::lookat( bool opengl )
     }
 }
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Camera::set(_vertex3f vrp, _vertex3f vpn, _vertex3f vup)
-{
+void Camera::set(_vertex3f vrp, _vertex3f vpn, _vertex3f vup) {
     this->initialize(vrp,vpn,vup);
 }
 
-/*
-void Camera::setVRP (_vertex3f vrp) { this->initialize(vrp,this->_vpn,this->_vup); }
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Camera::setVPN (_vertex3f vpn){ this->initialize(this->_vrp,vpn,this->_vup); }
-
-void Camera::setVUP (_vertex3f vup) { this->initialize(this->_vrp,this->_vpn,vup); }
-*/
 _vertex3f Camera::getVRP () { return this->_vrp; }
-
 _vertex3f Camera::getVPN () { return this->_vpn; }
-
 _vertex3f Camera::getVUP () { return this->_vup; }
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 float Camera::normalizeAngle(float angle)
 {
@@ -114,34 +118,34 @@ float Camera::normalizeAngle(float angle)
      return angle;
 }
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Camera::translateX(float d)
+void Camera::translateX(float dx)
 {
     _vertex3f vrp__ = _vrp;
-    this->_vrp += this->_u * d;
+    this->_vrp += this->_u * dx;
     if (this->_vrp.y < LIMIT_DOWN ) this->_vrp = vrp__; //para no salga por debajo del mapa
 }
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Camera::translateY(float d)
+void Camera::translateY(float dy)
 {
     _vertex3f vrp__ = _vrp;
-    this->_vrp += this->_v * d;
+    this->_vrp += this->_v * dy;
     if (this->_vrp.y < LIMIT_DOWN ) this->_vrp = vrp__; //para no salga por debajo del mapa
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**********************************************************************/
-
-void Camera::translateZ(float d)
+void Camera::translateZ(float dz)
 {
     _vertex3f vrp__ = _vrp;
-    this->_vrp -= this->_n * d;
+    this->_vrp -= this->_n * dz;
     if (this->_vrp.y < LIMIT_DOWN ) this->_vrp = vrp__; //para no salga por debajo del mapa
 }
-/**********************************************************************/
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Camera::rotateX(float rv)
 {
@@ -150,16 +154,16 @@ void Camera::rotateX(float rv)
         float angle = rv*M_PI/180;
         _vertex3f t = _n;
 
-        // Rotamos 'n' y 'v'
+        // Rotate 'n' y 'v'
         this->_n = t*cos(angle) - this->_v*sin(angle);
         this->_v = t*sin(angle) + this->_v*cos(angle);
 
-        //calculamos la transformacion de vista
+        //Calculate the viewing transformation
         this->viewingTransformation();
     }
 }
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Camera::rotateY(float rh)
 {
@@ -169,28 +173,28 @@ void Camera::rotateY(float rh)
         float angle = rh*M_PI/180;
         _vertex3f t = _u;
 
-        // Rotamos 'u' y 'n'
+        // Rotate 'u' y 'n'
         this->_u = t*cos(angle) - this->_n*sin(angle);
         this->_n = t*sin(angle) + this->_n*cos(angle);
 
-        //calculamos la transformacion de vista
+        //Calculate the viewing transformation
         this->viewingTransformation();
     }
 }
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Camera::rotateZ(float rl)
 {
     float angle = rl*M_PI/180;
     _vertex3f t = _u;
 
-    // Rotamos 'u' y 'v'
+    // Rotating 'u' y 'v'
     this->_u = t*cos(angle) - this->_v*sin(angle);
     this->_v = t*sin(angle) + this->_v*cos(angle);
 
-    //calculamos la transformacion de vista
+    //Calculate the viewing transformation
     this->viewingTransformation();
 }
 
-/**********************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

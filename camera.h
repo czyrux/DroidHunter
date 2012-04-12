@@ -9,6 +9,7 @@
  * @file camera.h
  * @brief Implementation of camera in OpenGL
  * @author Antonio Gutierrez Martinez
+ * @date April 2012
  *
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -39,46 +40,46 @@
 
 class Camera {
 private:
-    /** @brief La posicion donde se encuentra la camara. Denominado View Reference Point.*/
+    /** @brief Indicates the position of camera. Called View Reference Point (VRP)*/
     _vertex3f _vrp;
-    /** @brief Indica el sentido "hacia arriba" en la camara. Denominado View Up */
+    /** @brief Indicates the direction "up" on camera. Called View Up (VUP) */
     _vertex3f _vup;
-    /** @brief Indica la orientacion hacia donde mira la camara. Denominada View Plane Normal */
+    /** @brief Indicates the direction where the camera looks. Called View Plane Normal(VPN) */
     _vertex3f _vpn;
 
-    /** @brief Angulo de rotacion sobre el eje X en grados*/
+    /** @brief Angle of rotation about the X axis in degrees */
     float _alpha;
-    /** @brief Angulo de rotacion sobre el eje Y en grados*/
+    /** @brief Angle of rotation about the Y axis in degrees */
     float _beta;
-    /** @brief Angulo de rotacion sobre el eje Z en grados*/
+    /** @brief Angle of rotation about the Z axis in degrees */
     float _gamma;
 
-    /** @brief Eje Z del sistema de coordenadas de vista */
+    /** @brief Z axis of the coordinate system of view */
     _vertex3f _n;
-    /** @brief Eje X del sistema de coordenadas de vista */
+    /** @brief X axis of the coordinate system of view */
     _vertex3f _u;
-    /** @brief Eje Y del sistema de coordenadas de vista */
+    /** @brief Y axis of the coordinate system of view */
     _vertex3f _v;
 
     /** 
-     * @brief Calcula los angulos _alpha, _beta y _gamma, necesarios para realizar la transformacion
-     * de vista.
+     * @brief Calculates the angles _alpha, _beta and gamma, necessary for the transformation
+     * of view.
      */
     void viewingTransformation();
 
     /**
-     * @brief Calcula los valores de los vectores _n , _u y _v necesarios para poder calcular los
-     * angulos para la transformacion de vista.
-     * @param vrp Vector que representa el View Reference Point.
-     * @param vpn Vector que representa el View Plane Normal.
-     * @param vup Vector que representa el View Up.
+     * @brief Calculates the value of the vectors _n, _u and _v, used to calculate the angles of the
+     * transformation of view, and then, call the method @ref viewingTransformation.
+     * @param vrp vector that represent the View Reference Point.
+     * @param vpn vector that represent the View Plane Normal.
+     * @param vup vector that represent the el View Up.
      */
     void initialize(_vertex3f vrp,_vertex3f vpn,_vertex3f vup);
 
     /**
-     * @brief Normaliza el angulo pasado como argumento a [0º,360º].
-     * @param angle Angulo a normalizar.
-     * @return Angulo normalizado.
+     * @brief Normalize the angle passed like parameter in the range [0º,360º].
+     * @param angle to normalize.
+     * @return angle normalized.
      */
     float normalizeAngle ( float angle );
 
@@ -103,21 +104,6 @@ public:
      */
     Camera(_vertex3f vrp,_vertex3f vpn,_vertex3f vup);
 
-    /**
-     * @brief Asigna el valor de VRP.
-     * @param vrp Vector a asignar
-     */
-    void setVRP (_vertex3f vrp) {this->initialize(vrp,this->_vpn,this->_vup);}
-    /**
-     * @brief Asigna el valor de VPN.
-     * @param vpn Vector a asignar
-     */
-    void setVPN (_vertex3f vpn) {this->initialize(this->_vrp,vpn,this->_vup);}
-    /**
-     * @brief Asigna el valor de VUP.
-     * @param vup Vector a asignar
-     */
-    void setVUP (_vertex3f vup) {this->initialize(this->_vrp,this->_vpn,vup);}
     /**
      * @brief Obtiene el valor de VRP.
      * @return Vector
@@ -150,33 +136,33 @@ public:
      * @brief Cambia el angulo de inclinacion de la camara 'r' unidades. Respecto al eje X.
      * @param r unidades a rotar
      */
-    void rotateX ( float r );//inclinacion pitch
+    void rotateX ( float rv );//inclinacion pitch
     /**
      * @brief Cambia el angulo de rotacion de la camara 'r' unidades. Respecto al eje Y.
      * @param r unidades a rotar
      */
-    void rotateY ( float r );//rotacion rotate
+    void rotateY ( float rh );//rotacion rotate
     /**
      * @brief Cambia el angulo de viraje de la camara 'r' unidades. Respecto al eje Z.
      * @param r unidades a rotar
      */
-    void rotateZ ( float r );//viraje yaw
+    void rotateZ ( float rl );//viraje yaw
 
     /**
      * @brief Traslada la camara 'd' unidades en el eje X
      * @param d cantidad a trasladar
      */
-    void translateX ( float d );
+    void translateX ( float dx );
     /**
      * @brief Traslada la camara 'd' unidades en el eje Y
      * @param d cantidad a trasladar
      */
-    void translateY ( float d );
+    void translateY ( float dy );
     /**
      * @brief Traslada la camara 'd' unidades en el eje Z
      * @param d cantidad a trasladar
      */
-    void translateZ ( float d );
+    void translateZ ( float dz );
 
 };
 #endif // CAMERA_H
