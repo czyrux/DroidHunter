@@ -79,19 +79,16 @@ void Camera::initialize(_vertex3f vrp,_vertex3f vpn,_vertex3f vup) {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Camera::lookat( bool opengl )
+void Camera::lookat(  )
 {
-    if ( opengl ) {
-        gluLookAt (_vrp.x,_vrp.y,_vrp.z,_vpn.x,_vpn.y,_vpn.z,_vup.x,_vup.y,_vup.z);
-    }else{
-     //aplicamos la transformacion
+     //gluLookAt (_vrp.x,_vrp.y,_vrp.z,_vpn.x,_vpn.y,_vpn.z,_vup.x,_vup.y,_vup.z);
+     //apply the transformation
      glMatrixMode(GL_MODELVIEW);
      glLoadIdentity();
      glRotatef(-_gamma,0,0,1);
      glRotatef(-_beta,0,1,0);
      glRotatef(_alpha,1,0,0);
      glTranslatef(-this->_vrp.x,-this->_vrp.y,-this->_vrp.z);
-    }
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -198,3 +195,7 @@ void Camera::rotateZ(float rl)
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void Camera::fixedCamera( bool b ) {
+    this->_freeMoving = !b;
+}

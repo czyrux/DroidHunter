@@ -77,7 +77,7 @@ private:
     void initialize(_vertex3f vrp,_vertex3f vpn,_vertex3f vup);
 
     /**
-     * @brief Normalize the angle passed like parameter in the range [0º,360º].
+     * @brief Normalize the angle in the range [0º,360º].
      * @param angle to normalize.
      * @return angle normalized.
      */
@@ -92,12 +92,12 @@ private:
 public:
 
     /**
-     * @brief Constructor por defecto.
+     * @brief Constructor by default.
      */
     Camera();
 	
     /**
-     * @brief Constructor con parametros.
+     * @brief Constructor with parameters.
      * @param vrp View Reference Point
      * @param vpn View Plane Normal
      * @param vup View Up
@@ -105,64 +105,71 @@ public:
     Camera(_vertex3f vrp,_vertex3f vpn,_vertex3f vup);
 
     /**
-     * @brief Obtiene el valor de VRP.
+     * @brief Get the value of VRP.
      * @return Vector
      */
     _vertex3f getVRP ();
     /**
-     * @brief Obtiene el valor de VPN.
-     * @param Vector
+     * @brief Get the value of VPN.
+     * @return Vector
      */
     _vertex3f getVPN ();
     /**
-     * @brief Obtiene el valor de VUP.
-     * @param vrp Vector a asignar
+     * @brief Get the value of VUP.
+     * @param Vector
      */
     _vertex3f getVUP ();
+
     /**
-     * @brief Asigna el valor de VRP, VPN y VUP.
-     * @param vrp Vector a asignar a VRP
-     * @param vpn Vector a asignar a VPN
-     * @param vup Vector a asignar a VUP
+     * @brief Set the value of VRP, VPN y VUP.
+     * @param Value of VRP
+     * @param Value of VPN
+     * @param Value of VUP
      */
     void set(_vertex3f vrp,_vertex3f vpn,_vertex3f vup);
 
     /**
-     * @brief Realiza la transformacion de vista.
+     * @brief Define a viewing transformation.
      */
-    void lookat( bool opengl = false );
+    void lookat();
 
     /**
-     * @brief Cambia el angulo de inclinacion de la camara 'r' unidades. Respecto al eje X.
-     * @param r unidades a rotar
+     * @brief Change the angle of inclination of the camera 'rv' units about the X axis.
+     * @param rv units to rotate
      */
     void rotateX ( float rv );//inclinacion pitch
     /**
-     * @brief Cambia el angulo de rotacion de la camara 'r' unidades. Respecto al eje Y.
-     * @param r unidades a rotar
+     * @brief Change the angle of rotation of the camera 'rh' units about the Y axis.
+     * @param rh units to rotate
      */
     void rotateY ( float rh );//rotacion rotate
     /**
-     * @brief Cambia el angulo de viraje de la camara 'r' unidades. Respecto al eje Z.
-     * @param r unidades a rotar
+     * @brief Change the angle of turn of the camera 'rl' units about the Z axis.
+     * @param rl units to rotate
      */
     void rotateZ ( float rl );//viraje yaw
 
     /**
-     * @brief Traslada la camara 'd' unidades en el eje X
-     * @param d cantidad a trasladar
+     * @brief Translade the camera 'dx' units about the X axis.
+     * @param dx units to translate
      */
     void translateX ( float dx );
     /**
-     * @brief Traslada la camara 'd' unidades en el eje Y
-     * @param d cantidad a trasladar
+     * @brief Translade the camera 'dy' units about the Y axis.
+     * @param dy units to translate
      */
     void translateY ( float dy );
     /**
-     * @brief Traslada la camara 'd' unidades en el eje Z
-     * @param d cantidad a trasladar
+     * @brief Translade the camera 'dz' units about the Z axis.
+     * @param dz units to translate
      */
     void translateZ ( float dz );
+
+    /**
+      * @brief If 'b' is true not allow the camera to turn. If 'b' is true
+      * the turning is allow.
+      */
+    void fixedCamera( bool b );
 
 };
 #endif // CAMERA_H
