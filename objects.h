@@ -84,7 +84,7 @@ protected:
     GLuint _texture ;
 
     /**
-      * @brief Calculate the normals of vertex and faces.
+      * @brief Calculate the normals of vertex and faces. Using for ilumination.
       */
     void createNormals();
     /**

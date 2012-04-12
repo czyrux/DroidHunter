@@ -15,6 +15,7 @@ Scene::Scene(){
     _vertex3f pos;
     float scaleW = 3 , scaleD = 2;
 
+    //Creamos objetos para escena
     pos.x=-100;pos.z=-100;pos.y=0;
     this->_primary = new Droid();
     vector<material> material_color;

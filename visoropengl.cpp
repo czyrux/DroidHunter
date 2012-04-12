@@ -19,19 +19,20 @@
      Camera camera;
 
      //camara 1 frente
-     this->VRP.x=200;this->VRP.y=100;this->VRP.z=00;
+     this->VRP.x=200;this->VRP.y=200;this->VRP.z=0.0;
      this->VPN.x=1;this->VPN.y=1;this->VPN.z=0;
      this->VUP.x=0;this->VUP.y=1;this->VUP.z=0;
      camera.set(VRP,VPN,VUP);
      camera.rotateX(5);
      cameras.push_back(camera);
 
-     /*this->VRP.x=0;this->VRP.y=0;this->VRP.z=100;
-     this->VPN.x=0;this->VPN.y=0;this->VPN.z=1;
-     this->VUP.x=0;this->VUP.y=0;this->VUP.z=-1;
+
+     /*this->VRP.x=200;this->VRP.y=200;this->VRP.z=-200;
+     this->VPN.x=0;this->VPN.y=1;this->VPN.z=-1;
+     this->VUP.x=0;this->VUP.y=0;this->VUP.z=1;
      camera.set(VRP,VPN,VUP);
      cameras.push_back(camera);
-
+    /*
      this->VRP.x=100;this->VRP.y=100;this->VRP.z=100;
      this->VPN.x=1;this->VPN.y=1;this->VPN.z=1;
      this->VUP.x=0;this->VUP.y=1;this->VUP.z=0;
@@ -113,10 +114,9 @@ void VisorOpenGL::normalizeAngle(float angle) {
 void VisorOpenGL::initializeGL()  {
      glClearColor(1.0,1.0,1.0,1.0);
      glShadeModel(GL_FLAT);
-     //glShadeModel(GL_SMOOTH);
      glEnable(GL_DEPTH_TEST);
      glEnable(GL_CULL_FACE);
-     glEnable(GL_NORMALIZE);
+     //glEnable(GL_NORMALIZE);
 
      //Configurar signal idle
      timer = new QTimer(this);
@@ -190,7 +190,7 @@ void VisorOpenGL::setCamara() {
     /*if ( camera_actual == 1 )
         cameras[camera_actual].lookat(true);
     else*/
-        cameras[camera_actual].lookat();
+    cameras[camera_actual].lookat();
 }
 
 
@@ -204,10 +204,48 @@ void VisorOpenGL::paintGL() {
 
  void VisorOpenGL::idle() {
     _scene.animate();
+
+    //IMPLEMENTAR AQUI LA CAMARA DE SEGUIMIENTO DEL OBJETO PRINCIPAL
+    /*
+    if(tipo_camara == 1 || tipo_camara == 3){
+        switch(tipo_camara){
+        case 1: // 1? persona
+            vrp = escena.posicionRobot(robotCamara);
+            vrp.y = 4;
+            break;
+        case 3: // 3? persona
+            vrp = escena.posicionRobot(robotCamara) + escena.orientacionNegativa(robotCamara)*8;
+            vrp.y = 5;
+            break;
+        }
+
+        vpn = escena.orientacionNegativa(robotCamara);
+        vup.x = 0; vup.y = 1; vup.z = 0;
+
+        camara.define(vrp, vpn, vup);
+    }
+
+
+    _vertex3f Escena::posicionRobot(int i){
+        return robots[i]->Posicion();
+    }
+
+    _vertex3f Escena::orientacionNegativa(int i){
+        _vertex3f res;
+
+        res.x = -robots[i]->Orientacion().x;
+        res.y = -robots[i]->Orientacion().y;
+        res.z = -robots[i]->Orientacion().z;
+
+        return res;
+    }
+     */
+
     updateGL();
+
  }
 
-void VisorOpenGL::keyPressEvent(QKeyEvent *event){
+void VisorOpenGL::keyPressEvent(QKeyEvent *event) {
 
  switch( event->key() )   {
     //Seleccion de escena
@@ -323,6 +361,7 @@ void VisorOpenGL::keyPressEvent(QKeyEvent *event){
  }    
  updateGL();
 }
+
 
 void VisorOpenGL::dibujarEscena() {
       this->_scene.draw();

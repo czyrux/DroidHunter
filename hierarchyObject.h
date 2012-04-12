@@ -32,39 +32,111 @@
 
 #include "objects.h"
 
+/**
+  * @brief Define the possible states of the object. Using to modelate the behaviour and
+  * look of object.
+  */
 enum stateObject { _MOVING , _SCREAMING , _NORMAL , _TAKE_HAMMER , _HIT_HAMMER,
                    _INANIMATE, _FLYING , _OPEN , _CLOSE , _DEAD, _SHOOTING };
 
+/**
+  * @brief Class hierarchyObject, using to define a form for all of the hierarchycal objects,
+  * that's mean, object make using differents objects3D
+  */
 class _hierarchyObject {
 protected:
+    /** @brief Scale value for the width */
     float _width;
+    /** @brief Scale value for the high*/
     float _high;
+    /** @brief DrawMode of object */
     drawMode _drawMode;
+    /** @brief Holds the state of the object */
     stateObject _state;
 public:
 
+    /**
+      * @brief Constructor of class
+      */
     _hierarchyObject() {
         this->_width = this->_high = 0;
         _drawMode = gouraud;
         this->_state = _INANIMATE;
     }
 
+    /**
+      * @brief Destructor of class. Empty
+      */
     ~_hierarchyObject(){}
 
+    /**
+      * @brief Set the width and high of object
+      * @param value of width. Default 1.0
+      * @param value of high. Default 2.0
+      */
     void parameters( float width=1.0 , float high=2.0) {
         this->_width = width;
         this->_high = high;
     }
 
+    /**
+      * @brief Set the drawMode for the object
+      * @param drawMode
+      */
     void setDrawMode ( drawMode d ) { this->_drawMode = d; }
+
+    /**
+      * @brief Get the width of object
+      * @return value of width
+      */
     float getWidth() { return _width;}
+
+    /**
+      * @brief Get the high of object
+      * @return value of high
+      */
     float getHigh() { return _high; }
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     void setState( stateObject state ) { this->_state = state; }
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     stateObject getState() { return _state;}
 
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     virtual void setColor(vector<material> )=0;
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     virtual float getRadioCollision(){ return 0.0;}
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     virtual float getRange(){return 0.0;}
+
+    /**
+      * @brief
+      * @param
+      * @return
+      */
     virtual void draw( drawMode d)=0;
 
 };
