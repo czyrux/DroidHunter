@@ -12,57 +12,59 @@ TARGET = DroidHunter
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    wasp.cpp \
-    visoropengl.cpp \
-    starship.cpp \
-    scene.cpp \
-    particle.cpp \
-    objects.cpp \
-    map.cpp \
-    file_ply_stl.cpp \
-    droid.cpp \
-    circle.cpp \
-    character.cpp \
-    car.cpp \
-    camera.cpp \
-    ball_monster.cpp \
-    axis.cpp \
-    tree3D.cpp \
-    egg.cpp \
-    plants.cpp \
-    window.cpp \
-    droidHead.cpp \
-    droidhand.cpp
+SOURCES += \
+    code/window.cpp \
+    code/wasp.cpp \
+    code/visoropengl.cpp \
+    code/tree3D.cpp \
+    code/starship.cpp \
+    code/scene.cpp \
+    code/plants.cpp \
+    code/particle.cpp \
+    code/objects.cpp \
+    code/map.cpp \
+    code/mainwindow.cpp \
+    code/main.cpp \
+    code/file_ply_stl.cpp \
+    code/egg.cpp \
+    code/droidHead.cpp \
+    code/droidhand.cpp \
+    code/droid.cpp \
+    code/circle.cpp \
+    code/character.cpp \
+    code/car.cpp \
+    code/camera.cpp \
+    code/ball_monster.cpp \
+    code/axis.cpp
 
-HEADERS  += mainwindow.h \
-    wasp.h \
-    visoropengl.h \
-    vertex.h \
-    starship.h \
-    scene.h \
-    random.h \
-    particle.h \
-    objects.h \
-    matrix.h \
-    materials.h \
-    map.h \
-    hierarchyObject.h \
-    file_ply_stl.h \
-    droid.h \
-    circle.h \
-    character.h \
-    car.h \
-    camera.h \
-    ball_monster.h \
-    axis.h \
-    tree3D.h \
-    egg.h \
-    plants.h \
-    window.h \
-    droidHead.h \
-    droidhand.h
+HEADERS  += \
+    code/window.h \
+    code/wasp.h \
+    code/visoropengl.h \
+    code/vertex.h \
+    code/tree3D.h \
+    code/starship.h \
+    code/scene.h \
+    code/random.h \
+    code/plants.h \
+    code/particle.h \
+    code/objects.h \
+    code/matrix.h \
+    code/materials.h \
+    code/map.h \
+    code/mainwindow.h \
+    code/hierarchyObject.h \
+    code/file_ply_stl.h \
+    code/egg.h \
+    code/droidHead.h \
+    code/droidhand.h \
+    code/droid.h \
+    code/circle.h \
+    code/character.h \
+    code/car.h \
+    code/camera.h \
+    code/ball_monster.h \
+    code/axis.h
 
 FORMS    += mainwindow.ui
 
