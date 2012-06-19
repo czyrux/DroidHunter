@@ -93,7 +93,7 @@ void Map::draw( drawMode d ) {
     glCallList(_list);
 
     //Pintamos montañas
-    glMatrixMode(GL_MODELVIEW);
+    //glMatrixMode(GL_MODELVIEW);
     for ( int i=0 ; i<6 ; i++) {
         glPushMatrix();
         glTranslatef(-260+50.0*i,0,100+40.0*i);

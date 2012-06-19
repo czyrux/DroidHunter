@@ -19,52 +19,34 @@
      Camera camera;
 
      //camara 1 frente
-     this->VRP.x=200;this->VRP.y=200;this->VRP.z=0.0;
+     this->VRP.x=250;this->VRP.y=200;this->VRP.z=0;
      this->VPN.x=1;this->VPN.y=1;this->VPN.z=0;
      this->VUP.x=0;this->VUP.y=1;this->VUP.z=0;
      camera.set(VRP,VPN,VUP);
-     camera.rotateX(5);
      cameras.push_back(camera);
-
-
-     /*this->VRP.x=200;this->VRP.y=200;this->VRP.z=-200;
-     this->VPN.x=0;this->VPN.y=1;this->VPN.z=-1;
-     this->VUP.x=0;this->VUP.y=0;this->VUP.z=1;
-     camera.set(VRP,VPN,VUP);
-     cameras.push_back(camera);
-    /*
-     this->VRP.x=100;this->VRP.y=100;this->VRP.z=100;
-     this->VPN.x=1;this->VPN.y=1;this->VPN.z=1;
-     this->VUP.x=0;this->VUP.y=1;this->VUP.z=0;
-     camera.set(VRP,VPN,VUP);
-     //camera.rotateX(5);
-     cameras.push_back(camera);*/
 
      //camara 2
-     this->VRP.x=-250;this->VRP.y=200;this->VRP.z=280;
-     this->VPN.x=1;this->VPN.y=1;this->VPN.z=0;
+     this->VRP.x=100;this->VRP.y=75;this->VRP.z=200;
+     this->VPN.x=1;this->VPN.y=1;this->VPN.z=3;
      this->VUP.x=0;this->VUP.y=1;this->VUP.z=0;
      camera.set(VRP,VPN,VUP);
+     camera.fixedCamera(true);
      cameras.push_back(camera);
 
 
-     //camara 3 lateral izq
-     this->VRP.x=50;this->VRP.y=75;this->VRP.z=200;
-     this->VPN.x=1;this->VPN.y=1;this->VPN.z=1;
-     this->VUP.x=0;this->VUP.y=1;this->VUP.z=0;
+     //camara 3 vista pajaro
+     this->VRP.x=0;this->VRP.y=300;this->VRP.z=0;
+     this->VPN.x=0;this->VPN.y=1;this->VPN.z=0;
+     this->VUP.x=1;this->VUP.y=0;this->VUP.z=0;
      camera.set(VRP,VPN,VUP);
-     camera.rotateX(5);
-     camera.rotateY(5);
      cameras.push_back(camera);
 
 
      //camara 4 lateral drcho
-     this->VRP.x=200;this->VRP.y=100;this->VRP.z=-200;
-     this->VPN.x=1;this->VPN.y=1;this->VPN.z=0;
+     this->VRP.x=0;this->VRP.y=40;this->VRP.z=-200;
+     this->VPN.x=0;this->VPN.y=0;this->VPN.z=-1;
      this->VUP.x=0;this->VUP.y=1;this->VUP.z=0;
      camera.set(VRP,VPN,VUP);
-     camera.rotateX(5);
-     camera.rotateY(-10);
      cameras.push_back(camera);
 
      //camara 5 cam ajustable
@@ -79,14 +61,13 @@
      this->VPN.x=1;this->VPN.y=1;this->VPN.z=0;
      this->VUP.x=0;this->VUP.y=1;this->VUP.z=0;
      camera.set(VRP,VPN,VUP);
-     camera.rotateX(15);
      cameras.push_back(camera);
 
      //definimos la camara a visualizar
      camera_actual = 0;
      ncameras = 5 ;
 
-     _fog = true;
+     _fog = false;
 }
 
  VisorOpenGL::~VisorOpenGL() {
@@ -131,7 +112,7 @@ void VisorOpenGL::initializeGL()  {
      glFogfv (GL_FOG_COLOR, fogColor);
      glFogf (GL_FOG_DENSITY, density);
      glHint (GL_FOG_HINT, GL_NICEST);
-     glEnable (GL_FOG);
+     //glEnable (GL_FOG);
  }
 
 void VisorOpenGL::disable_FOG(){
@@ -163,33 +144,17 @@ void VisorOpenGL::setProjection(){
 void VisorOpenGL::setCamara() {
 
     //Ajustes de camara
-    /*if ( camera_actual == 2 ) {
-        _vertex3f aux = ((Camera)cameras[camera_actual]).getVRP();
-        cout << "antes " << aux.x << " " << aux.y << " " << aux.z << endl;
-        _vertex3f posicion = escena.getCharacterPosition();
-        aux = posicion;
+    if ( camera_actual == 4 ) { //this
+        _vertex3f position = this->_scene.getCharacterPosition();
+        position.y = 100;
+        this->VPN.x=0;this->VPN.y=1;this->VPN.z=0;
+        this->VUP.x=1;this->VUP.y=0;this->VUP.z=0;
+        ((Camera)cameras[camera_actual]).set(position,VPN,VUP);
 
-        float spin = escena.getCharacterSpin();
-        cout << "droid " << aux.x << " " << aux.y << " " << aux.z << ". giro: "<< spin << endl;
-
-        this->VRP.x=posicion.x;this->VRP.y=10;this->VRP.z=posicion.z;
-        this->VPN.x=0;this->VPN.y=0;this->VPN.z=1;
-        this->VUP.x=0;this->VUP.y=1;this->VUP.z=0;
-        ((Camera)cameras[camera_actual]).setVRP(VRP);
-        //((Camera)cameras[camera_actual]).rotateX(90);
-        //((Camera)cameras[camera_actual]).rotateZ(spin);
-        //((Camera)cameras[camera_actual]).translateX(posicion.x);
-        //((Camera)cameras[camera_actual]).translateZ(posicion.z);
         aux = ((Camera)cameras[camera_actual]).getVRP();
         cout << "despues " << aux.x << " " << aux.y << " " << aux.z << endl;
-    }if ( camera_actual == 1 ) {
+    }
 
-    }*/
-
-    //Visualizacion de la camara
-    /*if ( camera_actual == 1 )
-        cameras[camera_actual].lookat(true);
-    else*/
     cameras[camera_actual].lookat();
 }
 
@@ -264,7 +229,10 @@ void VisorOpenGL::keyPressEvent(QKeyEvent *event) {
     case Qt::Key_8:_scene.axis();break;
 
      //Cambio de camara
-     case Qt::Key_9:camera_actual = (this->camera_actual + 1 ) % ncameras;break;
+    case Qt::Key_9:
+    case Qt::Key_C:
+        camera_actual = (this->camera_actual + 1 ) % ncameras;
+        break;
 
     //Movimiento del personaje
     case Qt::Key_Left: _scene.moverLeft();break;
@@ -280,7 +248,7 @@ void VisorOpenGL::keyPressEvent(QKeyEvent *event) {
         if (_scene.getCharacterState()==_TAKE_HAMMER) { _scene.setCharacterState(_HIT_HAMMER);
         }else _scene.setCharacterState(_NORMAL);
         break;
-    case Qt::Key_C:
+    case Qt::Key_V:
         _scene.setCharacterState(_SCREAMING);
         break;
 

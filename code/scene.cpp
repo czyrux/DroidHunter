@@ -48,7 +48,7 @@ Scene::Scene(){
     _droids.push_back(aux);
 
     //put watchers
-    for ( int i=0 ; i<3 ; i++ ) {
+    for ( int i=0 ; i<1 ; i++ ) {
         pos.x=r.value();
         pos.z=r.value();
         aux.parameters(_wasp,this->numeroTicks,pos,scaleW,"wasp",personaje);
@@ -56,7 +56,7 @@ Scene::Scene(){
     }
 
     //put mini droids
-    for ( int i=0 ; i<8 ; i++ ) {
+    for ( int i=0 ; i<5 ; i++ ) {
         pos.x=r.value();
         pos.z=r.value();
         aux.parameters(_minDroid,this->numeroTicks,pos,scaleD,"droid",personaje);

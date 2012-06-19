@@ -87,7 +87,7 @@ private:
     int _turnsY;
     int _turnsZ;
 
-    bool _freeMoving;
+    bool _fixed;
 
 public:
 
@@ -169,7 +169,7 @@ public:
       * @brief If 'b' is true not allow the camera to turn. If 'b' is true
       * the turning is allow.
       */
-    void fixedCamera( bool b );
+    void fixedCamera( bool fixed );
 
 };
 #endif // CAMERA_H

@@ -62,14 +62,14 @@ void Camera::viewingTransformation()
 void Camera::initialize(_vertex3f vrp,_vertex3f vpn,_vertex3f vup) {
 
     this->_turnsX = this->_turnsY = this->_turnsZ = 0;
-    this->_freeMoving = false;
+    this->_fixed = false;
 
     this->_vrp=vrp;
     this->_vpn=vpn.normalize();
     this->_vup=vup.normalize();
 
     //calculing n , u y v
-    this->_n = /*this->_vrp -*/ this->_vpn.normalize();
+    this->_n = this->_vpn.normalize();
     this->_u = this->_vup.cross_product(this->_n).normalize();
     this->_v = this->_n.cross_product(this->_u).normalize();
 
@@ -119,34 +119,40 @@ float Camera::normalizeAngle(float angle)
 
 void Camera::translateX(float dx)
 {
-    _vertex3f vrp__ = _vrp;
-    this->_vrp += this->_u * dx;
-    if (this->_vrp.y < LIMIT_DOWN ) this->_vrp = vrp__; //para no salga por debajo del mapa
+    if (!_fixed) {
+        //_vertex3f vrp__ = _vrp;
+        this->_vrp += this->_u * dx;
+        //if (this->_vrp.y < LIMIT_DOWN ) this->_vrp = vrp__; //para no salga por debajo del mapa
+    }
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Camera::translateY(float dy)
 {
-    _vertex3f vrp__ = _vrp;
-    this->_vrp += this->_v * dy;
-    if (this->_vrp.y < LIMIT_DOWN ) this->_vrp = vrp__; //para no salga por debajo del mapa
+    if (!_fixed) {
+        //_vertex3f vrp__ = _vrp;
+        this->_vrp += this->_v * dy;
+        //if (this->_vrp.y < LIMIT_DOWN ) this->_vrp = vrp__; //para no salga por debajo del mapa
+    }
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Camera::translateZ(float dz)
 {
-    _vertex3f vrp__ = _vrp;
-    this->_vrp -= this->_n * dz;
-    if (this->_vrp.y < LIMIT_DOWN ) this->_vrp = vrp__; //para no salga por debajo del mapa
+    if (!_fixed) {
+        ///_vertex3f vrp__ = _vrp;
+        this->_vrp -= this->_n * dz;
+        //if (this->_vrp.y < LIMIT_DOWN ) this->_vrp = vrp__; //para no salga por debajo del mapa
+    }
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Camera::rotateX(float rv)
 {
-    if ( !_freeMoving && ((rv > 0 && _turnsX+1 < LIMIT_TURN) || (rv < 0 && _turnsX-1 > -LIMIT_TURN)) ){
+    if ( !_fixed && ((rv > 0 && _turnsX+1 < LIMIT_TURN) || (rv < 0 && _turnsX-1 > -LIMIT_TURN)) ){
         (rv < 0 )?_turnsX--:_turnsX++; //actualizamos el numero de giros
         float angle = rv*M_PI/180;
         _vertex3f t = _n;
@@ -164,7 +170,7 @@ void Camera::rotateX(float rv)
 
 void Camera::rotateY(float rh)
 {
-    if ( !_freeMoving && ((rh > 0 && _turnsY+1 < LIMIT_TURN) || (rh < 0 && _turnsY-1 > -LIMIT_TURN)) ){
+    if ( !_fixed && ((rh > 0 && _turnsY+1 < LIMIT_TURN) || (rh < 0 && _turnsY-1 > -LIMIT_TURN)) ){
         (rh < 0 )?_turnsY--:_turnsY++; //actualizamos el numero de giros
 
         float angle = rh*M_PI/180;
@@ -183,19 +189,21 @@ void Camera::rotateY(float rh)
 
 void Camera::rotateZ(float rl)
 {
-    float angle = rl*M_PI/180;
-    _vertex3f t = _u;
+    if (!_fixed) {
+        float angle = rl*M_PI/180;
+        _vertex3f t = _u;
 
-    // Rotating 'u' y 'v'
-    this->_u = t*cos(angle) - this->_v*sin(angle);
-    this->_v = t*sin(angle) + this->_v*cos(angle);
+        // Rotating 'u' y 'v'
+        this->_u = t*cos(angle) - this->_v*sin(angle);
+        this->_v = t*sin(angle) + this->_v*cos(angle);
 
-    //Calculate the viewing transformation
-    this->viewingTransformation();
+        //Calculate the viewing transformation
+        this->viewingTransformation();
+    }
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void Camera::fixedCamera( bool b ) {
-    this->_freeMoving = !b;
+void Camera::fixedCamera( bool fixed ) {
+    this->_fixed = fixed;
 }

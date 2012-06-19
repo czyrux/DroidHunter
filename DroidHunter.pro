@@ -6,7 +6,7 @@
 
 QT       += core gui
 QT += opengl
-INCLUDEPATH += .
+INCLUDEPATH += . ./code/
 
 TARGET = DroidHunter
 TEMPLATE = app
@@ -66,7 +66,7 @@ HEADERS  += \
     code/ball_monster.h \
     code/axis.h
 
-FORMS    += mainwindow.ui
+FORMS    += code/mainwindow.ui
 
 OTHER_FILES += \
     resources/stars.jpg \
